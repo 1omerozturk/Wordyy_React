@@ -3,14 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../../api/api'
 import 'react-toastify/dist/ReactToastify.css'
 import showToast from '../../alert/ShowToast'
-import { FaSign, FaSignInAlt, FaUser } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaSign, FaSignInAlt, FaUser } from 'react-icons/fa'
 
 const LoginPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword,setShowPassword]=useState(false)
   const [errors, setErrors] = useState({})
   const navigate=useNavigate()
+
+  const togglePasswordVisibility=()=>{
+    setShowPassword(!showPassword)
+  }
 
   const validateForm = () => {
     const errors = {}
@@ -77,8 +82,8 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="login-page w-full flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-2/3 border-2 border-violet-300 border-t-black border-r-black bg-gradient-to-l from-orange-600 to-slate-100  p-8 shadow-md rounded-lg">
+    <div className="select-none login-page w-full flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-2/3 max-w-2xl border-2 border-violet-300 border-t-black border-r-black bg-gradient-to-tr from-orange-600 to-slate-100  p-8 shadow-md rounded-lg">
           <div className='flex items-center justify-self-center my-5'>
 
           <FaSignInAlt color='64748b' size={30}/>
@@ -98,24 +103,35 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full col-span-5 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full col-span-5 text-lg px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
           </div>
           <div className="grid grid-flow-col">
-            <i className="pi pi-key text-gray-500 my-auto text-xl"></i>
+            <div className="grid grid-flow-col">
+            <i className="pi pi-key col-span-2 text-gray-500 my-auto text-xl"></i>
             <input
-              type="password"
+              type={showPassword?'text':'password'}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full col-span-5 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full text-lg col-span-8 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
             />
+            <button 
+              className='items-center w-0 mx-2 px-1'
+          type="button" 
+          onClick={togglePasswordVisibility}
+          style={{ color:'#335DB3FF', background: 'none', border: 'none', cursor: 'pointer' }}
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+        </div>
           </div>
           <div className="text-center">
             <button
+            disabled={(password==="" || email==='')}
               type="submit"
-              className="w-1/2 bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 transition duration-300"
+              className="w-1/2 bg-orange-600 disabled:bg-orange-700 text-white py-2 px-4 rounded-md hover:bg-orange-700 transition duration-300"
             >
               Login
             </button>

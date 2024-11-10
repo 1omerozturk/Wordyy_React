@@ -1,9 +1,12 @@
-import Card from "./Card";
+import WordyCard from "./WordyCard";
 
-export function Home(){
-    return(
-        <div className="mt-24 w-2/3 mx-auto h-full">
-            <Card/>
-        </div>
-    )
+export function Home() {
+  return (
+    <>
+    <h1>
+        Home
+    </h1>
+   <WordyCard/>
+    </>
+  )
 }
