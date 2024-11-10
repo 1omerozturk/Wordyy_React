@@ -1,17 +1,56 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider} from 'react-router-dom';
+import 'primeicons/primeicons.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import { Layout } from './pages/Layout';
+import Wordy from './pages/Wordy';
+import { Home } from './pages/Home';
+import { Error } from './pages/Error';
+import Quiz from './pages/Quiz';
+import Profile from './pages/User/Profile';
+import Login from './pages/User/Login';
+import Register from './pages/User/Register';
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout/>,
+      errorElement: <Error/>,
+      children: [
+        {
+          index: true,
+          element: <Home/>,        
+        },
+        {
+         path:'/wordy',
+          element: <Wordy/>,        
+        },
+        {
+         path:'/profile',
+          element: <Profile/>,        
+        },
+        {
+         path:'/quiz',
+          element: <Quiz/>,        
+        },
+        {
+         path:'/login',
+          element: <Login/>        
+        },
+        {
+         path:'/register',
+          element: <Register/>,        
+        },
+        
+      ]
+    }
+  ])
+  
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <RouterProvider router={router} />
+  );
+
