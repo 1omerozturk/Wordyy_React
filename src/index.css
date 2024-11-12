@@ -49,6 +49,9 @@ li a {
 .navlink{
     text-decoration: none;
     color: black;
+    display: flex;
+    justify-items: center;
+    justify-content:space-between;
 }
 .active{
 color: #0c3b78;

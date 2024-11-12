@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider} from 'react-router-dom';
@@ -13,6 +13,8 @@ import Quiz from './pages/Quiz';
 import Profile from './pages/User/Profile';
 import Login from './pages/User/Login';
 import Register from './pages/User/Register';
+import ProtectedRoute from './components/Route/ProtectedRoute';
+import isAuthenticated from './components/Route/IsAuthenticated';
 
   const router = createBrowserRouter([
     {
@@ -26,7 +28,11 @@ import Register from './pages/User/Register';
         },
         {
          path:'/wordy',
-          element: <Wordy/>,        
+          element:(
+           <ProtectedRoute>
+            <Wordy/>        
+           </ProtectedRoute>
+          ),
         },
         {
          path:'/profile',
@@ -34,7 +40,11 @@ import Register from './pages/User/Register';
         },
         {
          path:'/quiz',
-          element: <Quiz/>,        
+         element: 
+         <ProtectedRoute>
+           <Quiz/>        
+
+         </ProtectedRoute>
         },
         {
          path:'/login',
