@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import showToast from '../alert/ShowToast'
 import {
   UncontrolledDropdown,
   DropdownItem,
@@ -18,17 +19,30 @@ import {
 } from 'react-icons/fa'
 import { useState } from 'react'
 import WordyLogo from './Wordyy.png'
+import Logout from './User/Logout'
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false)
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const [user, setUser] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const navigate=useNavigate()
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
   const handleNav = () => {
     setNavbar(!navbar)
   }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    showToast('Tekrar görüşmek üzere 👋', 'info')
+    setIsAuthenticated(false)
+    navigate('/login')
+  }
+
   useEffect(() => {
     const updateNavbarClass = () => {
       if (window.innerWidth >= 768) {
@@ -42,6 +56,25 @@ const Navbar = () => {
 
     return () => window.removeEventListener('resize', updateNavbarClass)
   }, [])
+
+  useEffect(() => {
+    const checkAuth = () => {
+      if (localStorage.getItem('token')) {
+        setIsAuthenticated(true);
+        const name = JSON.parse(localStorage.getItem('user'));
+        setUser(name?.username);
+      } else {
+        setIsAuthenticated(false);
+      }
+    };
+  
+    checkAuth(); // İlk yüklemede kontrol et
+    window.addEventListener('storage', checkAuth); // localStorage değişikliklerini dinle
+  
+    return () => {
+      window.removeEventListener('storage', checkAuth); // Temizleme
+    };
+  }, []);
 
   return (
     <>
@@ -63,73 +96,75 @@ const Navbar = () => {
           <div className={`${navbar ? `links show` : `links`}`}>
             <ul>
               <NavLink
-                className={({ isActive }) =>
-                  isActive ? 'active text-black navlink' : ' items-center justify-between navlink text-black'
-                }
+                className='navlink'
                 to="/"
               >
                 <li>
                   <FaHome
                     className="mx-1"
                     size={25}
-                    color={({ isActive }) => (isActive ? 'blue' : 'black')}
+                    color={({ isActive }) => (isActive ? 'navlink' : '')}
                   />
                   Home
                 </li>
               </NavLink>
               <NavLink
-                className={({ isActive }) => (isActive ? 'active navlink text-black' : 'text-black navlink')}
+              className='navlink'
                 to="/wordy"
               >
                 <li>
                   <FaBook
                     className="mx-1"
-                    color={({ isActive }) => (isActive ? 'blue' : '')}
+                    color={({ isActive }) => (isActive ? 'navlink' : '')}
                   />
                   Wordy
                 </li>
               </NavLink>
               <NavLink
-                className={({ isActive }) => (isActive ? 'active navlink text-black' : 'text-black navlink')}
+                className="navlink"
                 to="/quiz"
               >
                 <li>
                   <FaQuestionCircle
                     className="mx-1"
-                    color={({ isActive }) => (isActive ? 'blue' : 'green')}
+                    color={({ isActive }) => (isActive ? 'navlink' : '')}
                   />
                   Quiz
                 </li>
               </NavLink>
-
-             
-                <div class="profile-dropdown select-none">
-                  
-                    <li class="profile-item" onClick={toggleDropdown} color='black'>
-                      <FaUser className="mx-1" color="black" /> Profile
-                      </li>
-                      {
-                        isOpen &&
-                        (
+              <NavLink
+              className="navlink">
+              <div class="profile-dropdown select-none">
+                <li class="profile-item" onClick={toggleDropdown} color="black">
+                  <FaUser className="mx-1" color="black" />
+                  {isAuthenticated? user:'Profile' } 
+                </li>
+                {isOpen && (
                   <div class="dropdown-content">
-                    <NavLink className="navlink" to="/login">
-                      <li>
-                        <FaSignInAlt className="mx-1" /> Login
-                      </li>
-                    </NavLink>
-                    <NavLink className="navlink" to="/register">
-                      <li>
-                        <FaUserPlus className="mx-1" /> Register
-                      </li>
-                    </NavLink >
-                    <NavLink className="navlink" to="/logout">
-                      <li>
-                        <FaSignOutAlt className="mx-1" /> Logout
-                      </li>
-                    </NavLink>
+                    {!isAuthenticated ? (
+                      <>
+                        <NavLink className="navlink" to="/login">
+                          <li>
+                            <FaSignInAlt className="" /> Login
+                          </li>
+                        </NavLink>
+                        <NavLink className="navlink" to="/register">
+                          <li>
+                            <FaUserPlus className="" /> Register
+                          </li>
+                        </NavLink>
+                      </>
+                    ) : (
+                      <>
+                          <li onClick={handleLogout} className='navlink'>
+                            <Logout />
+                          </li>
+                      </>
+                    )}
                   </div>
-                        )}
-                </div>
+                )}
+              </div>
+                </NavLink>
             </ul>
           </div>
         </div>

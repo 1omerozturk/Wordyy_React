@@ -1,12 +1,10 @@
+import HomeCard from "./Card/HomeCard";
 import WordyCard from "./WordyCard";
 
 export function Home() {
   return (
-    <>
-    <h1>
-        Home
-    </h1>
-   <WordyCard/>
-    </>
+    <div className="mt-2 bg-slate-600">
+    <HomeCard/>
+    </div>
   )
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API='https://localhost:5050/api'
+const API='http://localhost:5050/api'
 
 export const loginUser=(userData)=>{
     return axios.post(`${API}/users/login`,userData)

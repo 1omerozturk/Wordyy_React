@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { loginUser } from '../../api/api'
 import 'react-toastify/dist/ReactToastify.css'
 import showToast from '../../alert/ShowToast'
@@ -62,8 +62,7 @@ const LoginPage = () => {
           'info',
         )
         setTimeout(() => {
-          navigate.apply('/admin')
-          window.location.reload()
+          navigate('/admin')
         }, 2000)
       } else {
         showToast(
@@ -71,7 +70,7 @@ const LoginPage = () => {
           'info',
         )
         setTimeout(() => {
-          navigate.apply('/')
+          navigate('/')
           window.location.reload()
         }, 2000)
       }
@@ -135,6 +134,12 @@ const LoginPage = () => {
             >
               Login
             </button>
+            <div className='text-center'>
+              <p className="text-gray-700 text-lg my-2">If you have not an account?
+                <NavLink to="/register" 
+                className="text-gray-700 mx-2 text-lg hover:text-orange-700 transition duration-300">Register</NavLink>
+                </p>
+            </div>
           </div>
         </form>
       </div>

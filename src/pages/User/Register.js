@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { registerUser } from '../../api/api'
 import 'react-toastify/dist/ReactToastify.css'
 import showToast from '../../alert/ShowToast'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { FaUserPlus, FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const Register = () => {
@@ -38,19 +38,20 @@ const Register = () => {
     if(password !== passwordAgain){
       setValidate(false)
     }
-    else{
+    else if(password===passwordAgain){
       setValidate(true)
       }
 
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault()
     try {
       validatePassword()
       if(validate){
-        // await registerUser({ username, email, password })
+        await registerUser({name,lastname, username, email, password })
         resetForm()
-        navigate.apply('/login')
+        navigate('/login')
         showToast('Kayıt işlemi başarılı. Giriş yapabilirsiniz.', 'success')
         
       }
@@ -60,7 +61,7 @@ const Register = () => {
     } catch (error) {
       console.error('Registration failed:', error)
     }
-    e.preventDefault()
+    
   }
 
   return (
@@ -174,6 +175,12 @@ const Register = () => {
             >
               Register
             </button>
+            <div className='text-center'>
+              <p className="text-gray-500 text-lg my-2">Already have an account?
+                <NavLink to="/login" className="text-black mx-2 text-lg hover:text-lime-700
+                transition duration-300">Login</NavLink>
+                </p>
+            </div>
           </div>
         </form>
       </div>
