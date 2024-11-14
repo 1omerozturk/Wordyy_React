@@ -20,6 +20,15 @@ const showToast=(message,type)=>{
                         );
         
                 break;
+        case 'warning':
+            toast.warn(message, {
+                        position: "top-right",
+                        autoClose: 3500,
+                        hideProgressBar:false,
+                        closeOnClick:true}
+                        );
+        
+                break;
         case 'info':
             toast.info(message, {
                 position: "top-right",

@@ -56,7 +56,7 @@ const Register = () => {
         
       }
       else{
-        showToast('Passwords do not match', 'error')
+        showToast('Passwords do not match', 'warning')
       }
     } catch (error) {
       console.error('Registration failed:', error)

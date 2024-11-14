@@ -37,48 +37,47 @@ const LoginPage = () => {
   }
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    validateForm() // Formu tekrar doğrula
-
+    e.preventDefault();
+    validateForm(); // Formu tekrar doğrula
+  
     if (Object.keys(errors).length > 0) {
-      return // Hatalar varsa giriş işlemini yapma
+      return; // Hatalar varsa giriş işlemini yapma
     }
-
+  
     try {
-      const response = await loginUser({ email, password })
-      const token = localStorage.setItem('token', response.data.token)
-      const user = localStorage.setItem(
-        'user',
-        JSON.stringify(response.data.user),
-      )
-      setIsAuthenticated(!!user && !!token)
-      const admin = localStorage.getItem('user')
-      const loggedUser = JSON.parse(admin)
-      const role = JSON.parse(admin)
-
-      if (role.role === 'admin') {
-        showToast(
-          `Hoşgeldiniz, ${loggedUser.username} ${loggedUser.role}`,
-          'info',
-        )
-        setTimeout(() => {
-          navigate('/admin')
-        }, 2000)
-      } else {
-        showToast(
-          `Hoşgeldiniz, ${loggedUser.username} ${loggedUser.role}`,
-          'info',
-        )
-        setTimeout(() => {
-          navigate('/')
-          window.location.reload()
-        }, 2000)
-      }
+      const response = await loginUser({ email, password });
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      setIsAuthenticated(true);
+  
+      const loggedUser = JSON.parse(localStorage.getItem('user'));
+  
+      showToast(`Hoşgeldiniz, ${loggedUser.username} ${loggedUser.role}`, 'info');
+  
+      setTimeout(() => {
+        navigate(loggedUser.role === 'admin' ? '/admin' : '/');
+        window.location.reload();
+      }, 2000);
+  
     } catch (error) {
-      console.error('Login failed:', error)
-      setErrors({ api: 'Login failed. Please try again.' })
+      console.error('Login failed:', error);
+  
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 404) {
+          showToast('Kullanıcı bulunamadı', 'error');
+        } else if (status === 401) {
+          showToast('Geçersiz kimlik bilgileri', 'error');
+        } else {
+          showToast('Sunucu hatası. Lütfen tekrar deneyin.', 'error');
+        }
+      } else {
+        showToast('Bağlantı hatası. Lütfen tekrar deneyin.', 'error');
+      }
+      setErrors({ api: 'Giriş başarısız, Tekrar deneyiniz.' });
     }
-  }
+  };
+  
 
   return (
     <div className="select-none login-page w-full flex items-center justify-center min-h-screen bg-gray-100">
