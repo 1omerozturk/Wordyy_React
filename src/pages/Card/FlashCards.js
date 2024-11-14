@@ -27,12 +27,12 @@ const Flashcards = ({ enWord, trWord,enSentence,trSentence, onSpacePress }) => {
     const handleKeyPress = (event) => {
       if (event.code === 'Space') {
         event.preventDefault()
-        onSpacePress()
+        // onSpacePress()
         handleFlip()
       }
     }
 
-    window.addEventListener('keydown', handleKeyPress)
+    window.addEventListener('keypress', handleKeyPress)
     return () => {
       window.removeEventListener('keydown', handleKeyPress)
     }
@@ -72,9 +72,6 @@ const Flashcards = ({ enWord, trWord,enSentence,trSentence, onSpacePress }) => {
 
 const FlashcardList = ({
   words,
-  onSpacePress,
-  onNextPress,
-  onPreviousPress,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -99,11 +96,9 @@ const FlashcardList = ({
     const handleKeyPress = (event) => {
       if (event.code === 'ArrowRight') {
         event.preventDefault()
-        onNextPress()
         goToNext()
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault()
-        onPreviousPress()
         goToPrev()
       }
     }
@@ -148,9 +143,6 @@ const FlashcardList = ({
               trWord={word.trWord}
               enSentence={word.enSentence}
               trSentence={word.trSentence}
-              onSpacePress={onSpacePress}
-              onNextPress={onNextPress}
-              onPreviousPress={onPreviousPress}
             />
           )}
         </div>

@@ -13,7 +13,7 @@ export default function HomeCard() {
     
     <CardBody>
       <CardText>
-        <FlashcardList words={currentWord} />
+      <FlashcardList words={currentWord}/>
       </CardText>
       <Button>
         Button

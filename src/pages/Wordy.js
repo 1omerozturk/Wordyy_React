@@ -2,14 +2,11 @@ import React from 'react'
 import FlashcardList from './Card/FlashCards'
 export default function Wordy() {
  
-  
-  const spaceHandle=()=>{}
-  const onNextPress=()=>{}
-  const onPreviousPress=()=>{}
+
   return (
     <div className="mt-24 md:w-3/4 -sm:w-[500px] mx-auto h-full">
       <div className='mx-auto p-2  text-5xl font-bold select-none bg-gradient-to-tr from-gray-200 rounded-md to-gray-700 w-fit'>Wordy</div>
-      <FlashcardList words={words} onSpacePress={spaceHandle} onNextPress={onNextPress} onPreviousPress={onPreviousPress} />
+      <FlashcardList words={words} />
     </div>
   )
 }
