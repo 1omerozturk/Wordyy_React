@@ -81,7 +81,7 @@ const LoginPage = () => {
 
   return (
     <div className="select-none login-page w-full flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-2/3 max-w-2xl border-2 border-violet-300 border-t-black border-r-black bg-gradient-to-tr from-orange-600 to-slate-100  p-8 shadow-md rounded-lg">
+      <div className="sm:w-full md:w-2/3 max-w-2xl border-2 border-violet-300 border-t-black border-r-black bg-gradient-to-tr from-orange-600 to-slate-100  p-8 shadow-md rounded-lg">
           <div className='flex items-center justify-self-center my-5'>
 
           <FaSignInAlt color='64748b' size={30}/>

@@ -1,87 +1,164 @@
 .flashcard-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    height: 500px;
-    width: 100%;
-    margin: 0 auto;
-    perspective: 1000px;
-    overflow: hidden;
-  }
-  
-  .card-wrapper {
-    position: absolute;
-    transition: transform 0.7s linear, opacity 0.7s linear; 
-    opacity: 0;
-    transform: scale(0.6) rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 500px;
+  width: 100%;
+  margin: 0 auto;
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.card-wrapper {
+  position: absolute;
+  transition: transform 0.7s linear, opacity 0.7s linear;
+  opacity: 0;
+  transform: scale(0.6) rotateY(180deg);
 }
 
 .card-wrapper.active {
-    opacity: 1;
-    transform: scale(1) rotateX(0deg);
-    z-index: 2;
+  opacity: 1;
+  transform: scale(1) rotateX(0deg);
+  z-index: 2;
 }
 
 .card-wrapper.prev,
 .card-wrapper.next {
-    opacity: 0.5;
-    transform: scale(0.6) rotateY(0);
-    z-index: 1;
+  opacity: 0.5;
+  transform: scale(0.6) rotateY(0);
+  z-index: 1;
 }
-  
+
+.flashcard {
+  min-width: 280px; /* Daha küçük ekranlar için minimum genişlik */
+  max-width: 800px; /* Büyük ekranlarda maksimum genişlik */
+  width: 90%; /* Genel genişlik ayarı */
+  height: 60vh; /* Yükseklik dinamik olarak ayarlandı */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+  background-color: #f0f0f0; /* Varsayılan arka plan rengi */
+}
+
+.flashcard.flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard .front,
+.flashcard .back {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 8px;
+  border: gray 2px solid;
+  padding: 20px; /* İçerik için boşluk */
+  box-sizing: border-box;
+}
+
+.flashcard .front {
+  background-color: #007bff; /* Ön taraf rengi */
+}
+
+.flashcard .back {
+  background-color: #28a745; /* Arka taraf rengi */
+  transform: rotateY(180deg);
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%; /* Buton genişliği */
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+.counter {
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Media Queries */
+@media (max-width: 1536px) {
+  .flashcard-container {
+      height: 450px; /* Daha küçük ekranlar için yükseklik azaltıldı */
+  }
+
   .flashcard {
-    min-width: 800px;
-    width:max-content;
-    height: 450px;
-    cursor: pointer;
-    position: flex;
-    align-items: center;
-    justify-content: center;
-    transform-style: preserve-3d;
-    transition: transform 0.8s;
+      height: 55vh; /* Ekrana göre yükseklik */
+      width: 80vh;
   }
-  
-  .flashcard.flipped {
-    transform: rotateY(180deg);
+}
+@media (max-width: 1024px) {
+  .flashcard-container {
+      height: 450px; /* Daha küçük ekranlar için yükseklik azaltıldı */
   }
-  
+
+  .flashcard {
+      height: 55vh; /* Ekrana göre yükseklik */
+      width: 50vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .flashcard-container {
+      height: 400px;
+  }
+
+  .flashcard {
+      height: 50vh;
+  }
+
   .flashcard .front,
   .flashcard .back {
-    position: absolute;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    border-radius: 8px;
-    border: gray 3px solid;
-  }
-   
-  .flashcard .back {
-    transform: rotateY(180deg);
+      padding: 15px; /* Daha küçük ekranlar için padding azaltıldı */
   }
 
   .button-container {
-    display: flex;
-    margin: 0 auto;
-    justify-items: center;
-    text-align: center;
-    justify-content: space-between;
-    width: 200px;
-    margin-top: 10px;
+      width: 100%;
+      max-width: 250px;
   }
-  
+
   .counter {
-    display:flex;
-    justify-content:center;
-    margin: 0 auto;
-    margin-top: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
+      font-size: 0.9rem;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .flashcard-container {
+      height: 400px;
+  }
+
+  .flashcard {
+      height: 50vh;
+  }
+
+  .flashcard .front,
+  .flashcard .back {
+      padding: 10px;
+      font-size: 0.4rem; /* Küçük ekranlarda yazı boyutunu küçült */
+  }
+  .button-container{
+    width: 100%;
+    max-width: 150px;
+  }
+
+  .counter {
+      font-size: 0.8rem;
+  }
+}

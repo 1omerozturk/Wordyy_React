@@ -81,8 +81,8 @@ const Navbar = () => {
       <div className="nav-container">
         <div className="nav-head select-none">
           <NavLink className="navlink" to="/">
-            <div className="logo">
-              <img src={WordyLogo} alt="" />
+            <div className="grid grid-flow-col items-center justify-center">
+              <img className='w-[70px] h-[70px] sm:w-[85px] sm:h-[85px] md:w-[100px] md:h-[100px] border-2 border-sky-500 rounded-full' src={WordyLogo} alt="" />
               <div className="text-3xl text-gray-400 font-bold ml-4 decoration-none">
                 Wordyy
               </div>

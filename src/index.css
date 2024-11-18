@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes spin-360{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+.hover-spin-360:hover{
+    animation: spin-360 0.3s linear;
+}
 
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -31,11 +44,11 @@ li a {
     display: flex;
     margin: 0 auto;
 }
-.logo{
+/* .logo{
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
+} */
 
 .logo img {
     height: 5rem;

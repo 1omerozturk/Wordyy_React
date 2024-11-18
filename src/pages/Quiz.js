@@ -59,10 +59,8 @@ const startQuiz = () => {
 };
 
 return (
-  <>
-  <div className="mx-auto p-2 text-5xl font-bold bg-gradient-to-tr from-slate-200 rounded-md to-slate-900 w-fit mb-3">
-    Quiz
-  </div>
+  <div className="mt-5 md:w-3/4 -sm:w-[500px] mx-auto h-full">
+  <div className='mx-auto p-2  text-5xl font-bold select-none bg-gradient-to-tr from-lime-200 rounded-md to-lime-700 w-fit'>Wordy Quiz</div>
     {start ? (
       <div className="grid w-1/2 mx-auto bg-slate-400 rounded-md py-2 mt-3">
         <p className="mx-auto font-semibold text-center w-7 h-7 border-2 border-red-500 rounded-full">{time}</p>
@@ -91,6 +89,6 @@ return (
         Start Quiz
       </button>
     )}
-    </>
+    </div>
 );
 }
