@@ -16,6 +16,7 @@ import Register from './pages/User/Register';
 import ProtectedRoute from './components/Route/ProtectedRoute';
 import isAuthenticated from './components/Route/IsAuthenticated';
 import WordyAdd from './pages/Wordy/WordyAdd';
+import { WordyEdit } from './pages/Wordy/WordyEdit';
 
   const router = createBrowserRouter([
     {
@@ -34,6 +35,12 @@ import WordyAdd from './pages/Wordy/WordyAdd';
             <Wordy/>        
            </ProtectedRoute>
           ),
+          children:[
+            {
+              path:'wordyedit/:id',
+              element:<WordyEdit/>,
+              }
+          ]
         },
         {
          path:'/wordyadd',

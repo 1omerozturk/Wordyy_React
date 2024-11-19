@@ -58,16 +58,6 @@ const Register = () => {
     }
   }
 
-  const resetForm = () => {
-    setUserData({
-      name: '',
-      lastname: '',
-      username: '',
-      email: '',
-      password: '',
-    })
-    setPasswordAgain('')
-  }
 
  
 

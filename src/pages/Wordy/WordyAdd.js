@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
-import { createWord } from '../../api/api'
+import React, { useEffect, useState } from 'react'
+import { createWord,updateWordy } from '../../api/api'
 import showToast from '../../alert/ShowToast'
+import { useNavigate } from 'react-router-dom'
 
-function WordyAdd() {
+const WordyAdd = ({ editData }) => {
+
+  const navigate=useNavigate();
+  
   const [formData, setFormData] = useState({
     turkish: '',
     english: '',
@@ -12,6 +16,13 @@ function WordyAdd() {
     type: '',
     created_at: new Date(),
   })
+
+  useEffect(() => {
+    if (editData) {
+      setFormData(editData)
+      console.log(editData)
+    }
+  },[editData])
 
   const wordyTypes = [
     'Noun - İsim', // İsim
@@ -34,32 +45,49 @@ function WordyAdd() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    createWord(formData).then(
-      (response) => {
-        console.log(response)
-        if (response?.status === 201) {
-          showToast('Word added successfully', 'success')
-          setFormData({
-            turkish: '',
-            english: '',
-            turkishExample: '',
-            englishExample: '',
-            image: '',
-            type: '',
-          })
-        }
-      },
-      (error) => {
-        console.error(error)
-        showToast('Error adding word', 'error')
-      },
-    )
+    if (editData) {
+      updateWordy(editData._id,formData).then(
+        (response) => {
+          if (response?.status === 200) {
+            showToast(`${formData.english} updated successfully`, 'success')
+            navigate('/wordy')
+          }
+        },
+        (error) => {
+          console.error(error)
+          showToast('Error adding word', 'error')
+        },
+      )
+    } else {
+      createWord(formData).then(
+        (response) => {
+          console.log(response)
+          if (response?.status === 201) {
+            showToast('Wordy added successfully', 'success')
+            setFormData({
+              turkish: '',
+              english: '',
+              turkishExample: '',
+              englishExample: '',
+              image: '',
+              type: '',
+            })
+          }
+        },
+        (error) => {
+          console.error(error)
+          showToast('Error adding word', 'error')
+        },
+      )
+    }
   }
 
   return (
     <>
       <div className="flex items-center justify-center my-5">
-        <h1 className="text-5xl font-bold text-amber-500 ">Word Add</h1>
+        <h1 className="text-5xl font-bold text-amber-500 ">
+          {editData? 'Wordy Edit' : 'Wordy Add'}
+        </h1>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="w-4/6 mx-auto bg-sky-200 py-3 rounded-3xl">

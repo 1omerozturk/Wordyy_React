@@ -134,13 +134,13 @@ const Navbar = () => {
               </NavLink>
               <NavLink
               className="navlink">
-              <div class="profile-dropdown select-none">
-                <li class="profile-item" onClick={toggleDropdown} color="black">
+              <div className="profile-dropdown select-none">
+                <li className="profile-item" onClick={toggleDropdown} color="black">
                   <FaUser className="mx-1" color="black" />
                   {isAuthenticated? user:'Profile' } 
                 </li>
                 {isOpen && (
-                  <div class="dropdown-content">
+                  <div className="dropdown-content">
                     {!isAuthenticated ? (
                       <>
                         <NavLink className="navlink" to="/login">

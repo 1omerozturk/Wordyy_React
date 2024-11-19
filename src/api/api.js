@@ -23,14 +23,25 @@ export const getAllWords = async () => {
   try {
     const token = getToken()
 
-    const response = await axios.get(
-      `${API}/wordy`, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(`${API}/wordy`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
+    return response.data
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+export const getWordy = async (id) => {
+  try {
+    const token = getToken()
+    const response = await axios.get(`${API}/wordy/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return response.data
   } catch (error) {
     console.error(error.response ? error.response.data : error.message)
@@ -39,32 +50,46 @@ export const getAllWords = async () => {
 
 export const createWord = async (wordy) => {
   try {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error('Token not found');
+    const token = getToken()
+    if (!token) throw new Error('Token not found')
 
     const response = await axios.post(
-      `${API}/wordy`, 
+      `${API}/wordy`,
       wordy, // Request body
       {
         headers: {
           Authorization: `Bearer ${token}`, // Header doğru yapılandırıldı
         },
-      }
-    );
+      },
+    )
 
+    return response
+  } catch (error) {
+    console.error('Error in createWord:', error.response?.data || error.message)
+  }
+}
+
+export const updateWordy = async (id, wordy) => {
+  try {
+    const token = getToken()
+    if (!token) throw new Error('Token not found')
+
+    const response = await axios.put(`${API}/wordy/${id}`, wordy, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return response;
   } catch (error) {
-    console.error('Error in createWord:', error.response?.data || error.message);
+    console.error(error.response ? error.response.data : error.message)
   }
-};
-
-
+}
 
 // User Log check function
 export const getToken = () => {
   const token = localStorage.getItem('token')
   if (!token) {
-    return null;
+    return null
   }
   return token
 }
