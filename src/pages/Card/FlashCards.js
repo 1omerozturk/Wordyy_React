@@ -4,7 +4,7 @@ import './FlashCards.css'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 
-const Flashcards = ({ enWord, trWord, enSentence, trSentence, image, id }) => {
+const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) => {
   const [isFlipped, setIsFlipped] = useState(false)
   const [frontColor, setFrontColor] = useState('')
   const [backColor, setBackColor] = useState('')
@@ -59,9 +59,9 @@ const Flashcards = ({ enWord, trWord, enSentence, trSentence, image, id }) => {
             ) : (
               ''
             )}
-            <h5 className="font-mono font-semibold text-center">
-              {enWord} - (n)
-            </h5>
+            <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
+              {enWord} - <span className='text-slate-300'> ( {type.split("-",1)})</span>
+            </div>
             <hr className="bg-white text-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto px-2 text-base md:text-lg lg:text-xl">
               {enSentence}
@@ -73,8 +73,17 @@ const Flashcards = ({ enWord, trWord, enSentence, trSentence, image, id }) => {
           style={{ backgroundColor: backColor ? backColor : 'gray' }}
         >
           <div clasName="row text-center w-2/3 gap-y-10">
-            <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl">
-              {trWord}
+          {image !== '' ? (
+              <img
+                className="mx-auto object-center w-[100px] h-[100px] md:w-[200px] md:h-[200px] border-b-2 border-t-2 rounded-xl border-b-gray-500 border-t-gray-500 border-r-0 border-l-0"
+                src={image}
+                alt={enWord}
+              ></img>
+            ) : (
+              ''
+            )}
+            <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
+              {trWord} -<span className='text-slate-300'>( {type.split("-",2)[1]} )</span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto text-base md:text-lg px-2 lg:text-xl">
@@ -178,6 +187,7 @@ const FlashcardList = ({ words }) => {
                   <Flashcards
                     enWord={word.english}
                     trWord={word.turkish}
+                    type={word.type}
                     enSentence={word.englishExample}
                     trSentence={word.turkishExample}
                     image={word.image ? word.image : ''}
