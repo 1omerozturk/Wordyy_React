@@ -14,11 +14,12 @@ import Profile from './pages/User/Profile'
 import Login from './pages/User/Login'
 import Register from './pages/User/Register'
 import ProtectedRoute from './components/Route/ProtectedRoute'
-import isAuthenticated from './components/Route/IsAuthenticated'
 import WordyAdd from './pages/Wordy/WordyAdd'
 import { WordyEdit } from './pages/Wordy/WordyEdit'
-import { WordyList } from './pages/Wordy/WordyList'
+import { WordyList } from './pages/WordyList/WordyList'
 import { UserProvider } from './pages/User/UserContext'
+import { WordyListAdd } from './pages/WordyList/WordyListAdd'
+import { WordyListDetail } from './pages/WordyList/WordyListDetail'
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,24 @@ const router = createBrowserRouter([
             <WordyList />
           </ProtectedRoute>
         ),
+        children: [
+          {
+            path: 'wordylist/:id',
+            element: (
+              <ProtectedRoute>
+                <WordyListDetail />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: '/wordylistadd',
+            element: (
+              <ProtectedRoute>
+                <WordyListAdd />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: '/quiz',
@@ -86,8 +105,7 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-<UserProvider>
-<RouterProvider router={router} />
-</UserProvider>
-
+  <UserProvider>
+    <RouterProvider router={router} />
+  </UserProvider>,
 )

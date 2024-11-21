@@ -1,7 +1,7 @@
 import axios from 'axios'
-
 const API = 'http://localhost:5050/api'
 
+// --------------------------------------------------
 // User API
 
 export const loginUser = (userData) => {
@@ -17,6 +17,7 @@ export const logOut = () => {
   return (window.location.href = '/login')
 }
 
+// -------------------------------------------------
 // Wordy API
 
 export const getAllWords = async () => {
@@ -79,12 +80,75 @@ export const updateWordy = async (id, wordy) => {
         Authorization: `Bearer ${token}`,
       },
     })
-    return response;
+    return response
   } catch (error) {
     console.error(error.response ? error.response.data : error.message)
   }
 }
 
+//--------------------------------------
+// WordyList API
+
+export const getAllWordyList = async (userId) => {
+  try {
+    const token = getToken()
+    const response = await axios.get(`${API}/wordylist/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+export const getWordyListById = async (userId, id) => {
+  try {
+    const token = getToken()
+    const response = await axios.get(`${API}/wordylist/${userId}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+export const deleteWordyListById = async (userId, id, data) => {
+  try {
+    const token = getToken()
+    const response = await axios.delete(
+      `${API}/wordyList/${userId}/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+export const updateWordyListById = async (userId, id) => {
+  try {
+    const token = getToken()
+    const response = await axios.put(`${API}/wordylist/${userId}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+// ------------------------------------
 // User Log check function
 export const getToken = () => {
   const token = localStorage.getItem('token')

@@ -60,7 +60,7 @@ const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) 
               ''
             )}
             <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
-              {enWord} - <span className='text-slate-300'> ( {type.split("-",1)})</span>
+              {enWord} - <span className='text-slate-300'> ( {type?.split("-",1)})</span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto px-2 text-base md:text-lg lg:text-xl">
@@ -83,7 +83,7 @@ const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) 
               ''
             )}
             <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
-              {trWord} -<span className='text-slate-300'>( {type.split("-",2)[1]} )</span>
+              {trWord} -<span className='text-slate-300'>( {type?.split("-",2)[1]} )</span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto text-base md:text-lg px-2 lg:text-xl">
