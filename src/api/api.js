@@ -5,12 +5,12 @@ const API = 'https://wordyy.onrender.com/api'
 // --------------------------------------------------
 // User API
 
-export const loginUser = (userData) => {
-  return axios.post(`${API}/user/login`, userData)
+export const loginUser = async(userData) => {
+  return await axios.post(`${API}/user/login`, userData)
 }
 
-export const registerUser = (userData) => {
-  return axios.post(`${API}/user/register`, userData)
+export const registerUser = async(userData) => {
+  return await axios.post(`${API}/user/register`, userData)
 }
 
 export const logOut = () => {
