@@ -1,24 +1,53 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import './FlashCards.css'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { MdOutlineBrightnessAuto } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
+import getRandomColor from '../../components/Color/GetRandomColor'
+import { Dropdown } from './Dropdown'
+import { UserContext } from '../User/UserContext'
+import { getUser } from '../../api/api'
 
-const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) => {
+const Flashcards = ({ wordy, autoSlider }) => {
+  const { user } = useContext(UserContext)
+  const [userId, setUserId] = useState('')
+  const [userRole, setUserRole] = useState('')
+  const [data, setData] = useState([])
+  const [wordyListSize, setWordyListSize] = useState()
   const [isFlipped, setIsFlipped] = useState(false)
   const [frontColor, setFrontColor] = useState('')
   const [backColor, setBackColor] = useState('')
 
-  const getRandomDarkColor = () => {
-    const r = Math.floor(Math.random() * 199)
-    const g = Math.floor(Math.random() * 199)
-    const b = Math.floor(Math.random() * 199)
-    return `rgb(${r}, ${g}, ${b})`
-  }
   useEffect(() => {
-    setFrontColor(getRandomDarkColor)
-    setBackColor(getRandomDarkColor)
+    if (user?._id) {
+      setUserRole(user.role)
+      setUserId(user._id)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (userId) {
+      getUser(userId).then((res) => {
+        setData(res)
+        setWordyListSize(res.wordyLists.length)
+      })
+    }
+  }, [userId])
+
+  useEffect(() => {
+    setFrontColor(getRandomColor)
+    setBackColor(getRandomColor)
   }, [])
+
+  useEffect(() => {
+    if (autoSlider) {
+      const intervalId = setInterval(() => {
+        setIsFlipped(!isFlipped)
+      }, 3500)
+      return () => clearInterval(intervalId)
+    }
+  }, [autoSlider])
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped)
@@ -50,21 +79,25 @@ const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) 
           style={{ backgroundColor: frontColor ? backColor : 'gray' }}
         >
           <div clasName="row text-center w-2/3 gap-y-10">
-            {image !== '' ? (
+            {wordy?.image !== '' ? (
               <img
                 className="mx-auto object-center w-[100px] h-[100px] md:w-[200px] md:h-[200px] border-b-2 border-t-2 rounded-xl border-b-gray-500 border-t-gray-500 border-r-0 border-l-0"
-                src={image}
-                alt={enWord}
+                src={wordy?.image}
+                alt={wordy?.english}
               ></img>
             ) : (
               ''
             )}
             <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
-              {enWord} - <span className='text-slate-300'> ( {type?.split("-",1)})</span>
+              {wordy?.english} -{' '}
+              <span className="text-slate-300">
+                {' '}
+                ( {wordy?.type?.split('-', 1)})
+              </span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto px-2 text-base md:text-lg lg:text-xl">
-              {enSentence}
+              {wordy?.englishExample}
             </div>
           </div>
         </div>
@@ -73,33 +106,51 @@ const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) 
           style={{ backgroundColor: backColor ? backColor : 'gray' }}
         >
           <div clasName="row text-center w-2/3 gap-y-10">
-          {image !== '' ? (
+            {wordy?.image !== '' ? (
               <img
                 className="mx-auto object-center w-[100px] h-[100px] md:w-[200px] md:h-[200px] border-b-2 border-t-2 rounded-xl border-b-gray-500 border-t-gray-500 border-r-0 border-l-0"
-                src={image}
-                alt={enWord}
+                src={wordy?.image}
+                alt={wordy?.english}
               ></img>
             ) : (
               ''
             )}
             <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
-              {trWord} -<span className='text-slate-300'>( {type?.split("-",2)[1]} )</span>
+              {wordy?.turkish} -
+              <span className="text-slate-300">
+                ( {wordy?.type?.split('-', 2)[1]} )
+              </span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto text-base md:text-lg px-2 lg:text-xl">
-              {trSentence}
+              {wordy?.turkishExample}
             </div>
           </div>
         </div>
       </div>
-      {localStorage.getItem('token') !== null ? (
-        <NavLink
-          style={{ textDecoration: 'none' }}
-          to={`/wordy/wordyedit/${id}`}
-          className="flex w-fit mx-auto col-span-1 justify-center items-center hover:animate-pulse"
-        >
-          <button className="btn btn-outline-warning">Edit</button>
-        </NavLink>
+      {userId ? (
+        <div className="grid grid-flow-col sm:w-full gap-x-5 w-2/3 mx-auto">
+          {userRole && userRole === 'user' && (
+            <NavLink
+              style={{ textDecoration: 'none' }}
+              to={`/wordy/wordyedit/${wordy?._id}`}
+              className="flex w-fit mx-auto col-span-1 hover:animate-pulse"
+            >
+              <button className="btn btn-outline-primary">Edit</button>
+            </NavLink>
+          )}
+          {wordyListSize === 0 ? (
+            <NavLink
+              style={{ textDecoration: 'none' }}
+              to={`/wordylist/wordylistadd`}
+              className="flex w-fit mx-auto col-span-1 hover:animate-pulse"
+            >
+              <button className="btn btn-outline-primary">New WordyList</button>
+            </NavLink>
+          ) : (
+            <Dropdown data={data} wordyId={wordy._id} />
+          )}
+        </div>
       ) : (
         ''
       )}
@@ -110,6 +161,7 @@ const Flashcards = ({ enWord, trWord,type, enSentence, trSentence, image, id }) 
 const FlashcardList = ({ words }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [user, setUser] = useState(null)
+  const [autoSlider, setAutoSlider] = useState(false)
 
   const getCurrentUser = () => {
     setUser(localStorage.getItem('token'))
@@ -118,6 +170,19 @@ const FlashcardList = ({ words }) => {
   useEffect(() => {
     getCurrentUser()
   }, [])
+
+  useEffect(() => {
+    if (autoSlider) {
+      const intervalId = setInterval(() => {
+        setCurrentIndex((currentIndex) => (currentIndex + 1) % words.length)
+      }, 7000)
+      return () => clearInterval(intervalId)
+    }
+  }, [autoSlider])
+
+  const handleAutoSlider = () => {
+    setAutoSlider(!autoSlider)
+  }
 
   const handlers = useSwipeable({
     onSwipedLeft: () =>
@@ -154,6 +219,18 @@ const FlashcardList = ({ words }) => {
   }, [goToNext, goToPrev])
   return (
     <>
+      <div className="h-fit flex items-center justify-center">
+        <button
+          title="Auto Slide"
+          className={`animate-pulse hover:animate-none btn text-slate-500 btn-outline-${
+            autoSlider ? 'danger' : 'dark'
+          }`}
+          onClick={handleAutoSlider}
+        >
+          <MdOutlineBrightnessAuto className="float-right ml-2 hover:animate-spin" size={25} />
+          {`${autoSlider ? 'Stop' : 'Start'}`}
+        </button>
+      </div>
       <div className="flex col min-h-[500px] h-3/4 min-w-fit mx-auto">
         {/* Sol Buton */}
 
@@ -164,7 +241,7 @@ const FlashcardList = ({ words }) => {
         >
           <FaArrowLeft
             title="Previous"
-            className={`text-2xl cursor-pointer ${
+            className={`sm:text-2xl cursor-pointer ${
               currentIndex === 0 ? 'text-slate-400' : ''
             }`}
           />
@@ -184,15 +261,7 @@ const FlashcardList = ({ words }) => {
                 }`}
               >
                 {index === currentIndex && (
-                  <Flashcards
-                    enWord={word.english}
-                    trWord={word.turkish}
-                    type={word.type}
-                    enSentence={word.englishExample}
-                    trSentence={word.turkishExample}
-                    image={word.image ? word.image : ''}
-                    id={word._id}
-                  />
+                  <Flashcards wordy={word} autoSlider={autoSlider} />
                 )}
               </div>
             ))}
@@ -202,13 +271,13 @@ const FlashcardList = ({ words }) => {
         {/* Sağ Buton */}
         <div className="flex">
           <button
-            className="bg-slate-300 w-fit h-fit p-2 float-start rounded-full flex ml-2 my-auto"
+            className="bg-slate-300 w-fit h-fit p-2 float-start rounded-full flex sm:ml-2 my-auto"
             onClick={goToNext}
             disabled={currentIndex === words.length - 1}
           >
             <FaArrowRight
               title="Next"
-              className={`text-2xl cursor-pointer ${
+              className={`sm:text-2xl cursor-pointer ${
                 currentIndex === words.length - 1 ? 'text-slate-400' : ''
               }`}
             />
@@ -217,7 +286,7 @@ const FlashcardList = ({ words }) => {
       </div>
 
       {/* Sayaç */}
-      <div className="counter select-none text-center text-lg text-slate-500">
+      <div className="counter mt-3 select-none text-center text-lg text-slate-500">
         {currentIndex + 1 === words.length ? (
           <div>
             {user === null ? (
@@ -230,7 +299,9 @@ const FlashcardList = ({ words }) => {
                   Login
                 </NavLink>{' '}
                 for more than{' '}
-                <span className="font-serif text-white bg-indigo-600 rounded-lg px-1">Wordy Card</span>
+                <span className="font-serif text-white bg-indigo-600 rounded-lg px-1">
+                  Wordy Card
+                </span>
               </div>
             ) : (
               'You have finished all the cards!'

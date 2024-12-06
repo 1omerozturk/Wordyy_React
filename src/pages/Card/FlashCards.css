@@ -14,7 +14,7 @@
   position: absolute;
   transition: transform 0.7s linear, opacity 0.7s linear;
   opacity: 0;
-  transform: scale(0.6) rotateY(180deg);
+  transform: scale(0.6) rotateX(180deg);
 }
 
 .card-wrapper.active {

@@ -10,7 +10,6 @@ import Wordy from './pages/Wordy/Wordy'
 import { Home } from './pages/Home'
 import { Error } from './pages/Error'
 import Quiz from './pages/Quiz'
-import Profile from './pages/User/Profile'
 import Login from './pages/User/Login'
 import Register from './pages/User/Register'
 import ProtectedRoute from './components/Route/ProtectedRoute'
@@ -19,6 +18,9 @@ import { WordyEdit } from './pages/Wordy/WordyEdit'
 import { WordyList } from './pages/WordyList/WordyList'
 import { UserProvider } from './pages/User/UserContext'
 import { WordyListAdd } from './pages/WordyList/WordyListAdd'
+import { WordyListEdit } from './pages/WordyList/WordyListEdit'
+import { Profile } from './pages/User/Profile'
+import ProfileEdit from './pages/User/ProfileEdit'
 import { WordyListDetail } from './pages/WordyList/WordyListDetail'
 
 const router = createBrowserRouter([
@@ -43,19 +45,15 @@ const router = createBrowserRouter([
             path: 'wordyedit/:id',
             element: <WordyEdit />,
           },
+          {
+            path: 'wordyadd',
+            element: (
+              <ProtectedRoute>
+                <WordyAdd />
+              </ProtectedRoute>
+            ),
+          },
         ],
-      },
-      {
-        path: '/wordyadd',
-        element: (
-          <ProtectedRoute>
-            <WordyAdd />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '/profile',
-        element: <Profile />,
       },
       {
         path: '/wordylist',
@@ -66,22 +64,33 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: 'wordylist/:id',
-            element: (
-              <ProtectedRoute>
-                <WordyListDetail />
-              </ProtectedRoute>
-            ),
+            path: 'wordylistadd/:id',
+            element: <WordyListAdd />,
           },
           {
-            path: '/wordylistadd',
-            element: (
-              <ProtectedRoute>
-                <WordyListAdd />
-              </ProtectedRoute>
-            ),
+            path: 'wordylistadd',
+            element: <WordyListAdd />,
+          },
+          {
+            path: 'wordylistedit/:id',
+            element: <WordyListEdit/>,
+          },
+          {
+            path: 'wordylist/:id',
+            element: <WordyListDetail/>,
           },
         ],
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
+        children:[
+          {
+            path: 'profileedit/:id',
+            element: <ProfileEdit />,
+
+          },
+        ]
       },
       {
         path: '/quiz',

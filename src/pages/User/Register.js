@@ -75,7 +75,9 @@ const Register = () => {
             REGISTER
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} 
+        autoComplete='false'
+        className="space-y-4">
           <div className=" grid grid-flow-col">
             <i className="pi pi-user-edit text-gray-500 my-auto text-xl text-center "></i>
             <input

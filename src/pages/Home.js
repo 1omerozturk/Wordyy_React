@@ -9,7 +9,7 @@ export function Home() {
 // setData(response.data);
 // },data)
   return (
-    <div className="mt-2 bg-slate-600">
+    <div className="">
     <HomeCard/>
     </div>
   )

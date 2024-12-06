@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { createWord,updateWordy } from '../../api/api'
+import {createWordy,updateWordy } from '../../api/api'
 import showToast from '../../alert/ShowToast'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { FaWindowClose } from 'react-icons/fa'
 
 const WordyAdd = ({ editData }) => {
 
@@ -59,7 +60,7 @@ const WordyAdd = ({ editData }) => {
         },
       )
     } else {
-      createWord(formData).then(
+      createWordy(formData).then(
         (response) => {
           console.log(response)
           if (response?.status === 201) {
@@ -83,7 +84,12 @@ const WordyAdd = ({ editData }) => {
   }
 
   return (
-    <>
+    <div className='bg-slate-300 py-2 mb-3'>
+       <div className='float-right'>
+            <NavLink  to="/wordy">
+            <button className=''><FaWindowClose color='red' size={25}/></button>
+            </NavLink>
+            </div>
       <div className="flex items-center justify-center my-5">
         <h1 className="text-5xl font-bold text-amber-500 ">
           {editData? 'Wordy Edit' : 'Wordy Add'}
@@ -181,7 +187,7 @@ const WordyAdd = ({ editData }) => {
           </div>
         </div>
       </form>
-    </>
+    </div>
   )
 }
 

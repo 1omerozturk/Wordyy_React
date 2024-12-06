@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Card,
   CardGroup,
@@ -14,47 +14,44 @@ import { words } from '../Wordy/Wordy'
 import FlashcardList from './FlashCards'
 import { getAllWords } from '../../api/api'
 import { Spin } from '../../components/Spinner/Spin'
+import { UserContext } from '../User/UserContext'
 
 export default function HomeCard() {
+  const { user } = useContext(UserContext)
   const [wordyData, setWordyData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    if (user) {
+      setToken(user)
+    }
+  }, [user])
 
   const loadData = () => {
-    if (!localStorage.getItem('token')) {
+    if (!user) {
       setWordyData(words.slice(3, 6))
+      setLoading(false)
     } else {
       getAllWords().then((data) => {
         setWordyData(data)
+        setLoading(false)
       })
     }
-    setInterval(()=>{
-      setLoading(false)
-    },500)
   }
   useEffect(() => {
     loadData()
   }, [])
 
   return (
-    <>
-      {loading? (
-        <div className='h-0 my-10 mx-auto w-1/2 flex items-center justify-center'>
-        <Spin />
+    <div>
+      {loading ? (
+        <div className="h-0 my-10 mx-auto w-1/2 flex items-center justify-center">
+          <Spin color={'primary'} />
         </div>
       ) : (
-        <CardGroup>
-          {
-            <Card>
-              <CardBody>
-                <CardText>
-                  <FlashcardList words={wordyData} />
-                </CardText>
-                <Button>Button</Button>
-              </CardBody>
-            </Card>
-          }
-        </CardGroup>
+        <FlashcardList words={wordyData} />
       )}
-    </>
+    </div>
   )
 }

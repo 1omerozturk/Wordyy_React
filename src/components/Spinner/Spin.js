@@ -1,5 +1,5 @@
 import React from 'react'
 import Spinner from 'react-bootstrap/Spinner'
-export const Spin = () => {
-  return <Spinner variant='success' animation="grow" />
+export const Spin = ({color}) => {
+  return <Spinner variant={color} animation="grow" />
 }

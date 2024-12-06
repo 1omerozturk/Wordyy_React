@@ -86,7 +86,9 @@ const LoginPage = () => {
             LOGIN
           </h2>
         </div>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} 
+        autoComplete='false'
+        className="space-y-4">
           {errors.api && (
             <p className="text-red-500 text-center">{errors.api}</p>
           )}

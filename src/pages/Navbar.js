@@ -7,6 +7,7 @@ import {
   FaQuestionCircle,
   FaSignInAlt,
   FaUser,
+  FaUserEdit,
   FaUserPlus,
 } from 'react-icons/fa'
 import { MdSquare } from 'react-icons/md'
@@ -15,13 +16,36 @@ import { useState } from 'react'
 import WordyLogo from './Wordyy.png'
 import Logout from './User/Logout'
 import { UserContext } from './User/UserContext'
+import { getImage, getUser } from '../api/api'
 
 const Navbar = () => {
   const { user, logout } = useContext(UserContext)
   const [navbar, setNavbar] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [profile,setProfile]=useState({})
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [userId, setUserId] = useState('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user?._id) {
+      setUserId(user._id)
+    }
+  }, [user])
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (userId) {
+        try {
+          const res = await getUser(userId)
+          setProfile(res)
+        } catch (error) {
+          console.error('Error fetching user info:', error)
+        }
+      }
+    }
+    fetchUserInfo()
+  }, [userId, profile])
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
@@ -30,9 +54,10 @@ const Navbar = () => {
     setNavbar(!navbar)
   }
 
+  const handleProfile = () => {
+    navigate(`/profile`)
+  }
   const handleLogout = () => {
-    // localStorage.removeItem('token')
-    // localStorage.removeItem('user')
     logout()
     showToast(`Tekrar görüşmek üzere👋`, 'info')
     setIsAuthenticated(false)
@@ -62,7 +87,7 @@ const Navbar = () => {
   }, [user])
 
   return (
-    <>
+    <div>
       <div className="nav-container">
         <div className="nav-head select-none">
           <NavLink className="navlink" to="/">
@@ -121,7 +146,7 @@ const Navbar = () => {
                     className="mx-1"
                     color={({ isActive }) => (isActive ? 'navlink' : '')}
                   />
-                  Quiz
+                  QWuiz
                 </li>
               </NavLink>
               <div className="navlink">
@@ -131,7 +156,14 @@ const Navbar = () => {
                     onClick={toggleDropdown}
                     color="black"
                   >
-                    <FaUser className="mx-1" color="black" />
+                    {isAuthenticated &&profile?.profilePicture? (
+                      <img
+                        className="h-8 w-8 rounded-full mr-1 "
+                        src={getImage(profile?.profilePicture)}
+                      />
+                    ) : (
+                      <FaUser className="mx-1" color="black" />
+                    )}
                     {isAuthenticated ? user?.username : 'Profile'}
                   </li>
                   {isOpen && (
@@ -152,6 +184,13 @@ const Navbar = () => {
                       ) : (
                         <>
                           <li
+                            onClick={handleProfile}
+                            className="navlink cursor-pointer"
+                          >
+                            <FaUserEdit className="mx-1" color="black" />
+                            Profile
+                          </li>
+                          <li
                             onClick={handleLogout}
                             className="navlink cursor-pointer"
                           >
@@ -167,7 +206,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
