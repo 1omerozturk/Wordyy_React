@@ -130,7 +130,7 @@ const Flashcards = ({ wordy, autoSlider }) => {
       </div>
       {userId ? (
         <div className="grid grid-flow-col sm:w-full gap-x-5 w-2/3 mx-auto">
-          {userRole && userRole === 'user' && (
+          {userRole && userRole === 'admin' && (
             <NavLink
               style={{ textDecoration: 'none' }}
               to={`/wordy/wordyedit/${wordy?._id}`}
