@@ -4,6 +4,7 @@ import showToast from '../alert/ShowToast'
 import {
   FaBars,
   FaHome,
+  FaLanguage,
   FaQuestionCircle,
   FaSignInAlt,
   FaUser,
@@ -22,7 +23,7 @@ const Navbar = () => {
   const { user, logout } = useContext(UserContext)
   const [navbar, setNavbar] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [profile,setProfile]=useState({})
+  const [profile, setProfile] = useState({})
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userId, setUserId] = useState('')
   const navigate = useNavigate()
@@ -140,6 +141,15 @@ const Navbar = () => {
               ) : (
                 ''
               )}
+              <NavLink className="navlink" to="/translate">
+                <li>
+                  <FaLanguage
+                    className="mx-1"
+                    color={({ isActive }) => (isActive ? 'navlink' : '')}
+                  />
+                  Translate
+                </li>
+              </NavLink>
               <NavLink className="navlink" to="/quiz">
                 <li>
                   <FaQuestionCircle
@@ -156,7 +166,7 @@ const Navbar = () => {
                     onClick={toggleDropdown}
                     color="black"
                   >
-                    {isAuthenticated &&profile?.profilePicture? (
+                    {isAuthenticated && profile?.profilePicture ? (
                       <img
                         className="h-8 w-8 rounded-full mr-1 "
                         src={getImage(profile?.profilePicture)}

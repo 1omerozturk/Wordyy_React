@@ -1,15 +1,16 @@
 import axios from 'axios'
 import showToast from '../alert/ShowToast'
-const API = 'https://wordyy.onrender.com/api'
+// const API = 'https://wordyy.onrender.com/api'
+const API = 'http://localhost:5050/api'
 
 // --------------------------------------------------
 // User API
 
-export const loginUser = async(userData) => {
+export const loginUser = async (userData) => {
   return await axios.post(`${API}/user/login`, userData)
 }
 
-export const registerUser = async(userData) => {
+export const registerUser = async (userData) => {
   return await axios.post(`${API}/user/register`, userData)
 }
 
@@ -153,12 +154,12 @@ export const updateWordy = async (id, wordy) => {
 export const getQuizData = async () => {
   try {
     const token = getToken()
-    const response = await axios.get(`${API}/quiz`,{
+    const response = await axios.get(`${API}/quiz`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    return response;
+    return response
   } catch (error) {
     console.error(error.response ? error.response.data : error.message)
   }
@@ -254,6 +255,23 @@ export const updateWordyListById = async (userId, id, data) => {
       },
     })
     return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+export const translateTrToEn = async (text) => {
+  try {
+    const response = await axios.post(`${API}/translate/tr-en`, {text:text})
+    return response;
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+export const translateEnToTr = async (text) => {
+  try {
+    const response = await axios.post(`${API}/translate/en-tr`, {text:text})
+    return response;
   } catch (error) {
     console.error(error.response ? error.response.data : error.message)
   }

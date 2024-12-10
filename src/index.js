@@ -14,6 +14,7 @@ import Login from './pages/User/Login'
 import Register from './pages/User/Register'
 import ProtectedRoute from './components/Route/ProtectedRoute'
 import WordyAdd from './pages/Wordy/WordyAdd'
+import Translate from './pages/Translate/Translate'
 import { WordyEdit } from './pages/Wordy/WordyEdit'
 import { WordyList } from './pages/WordyList/WordyList'
 import { UserProvider } from './pages/User/UserContext'
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
             element: <WordyListDetail/>,
           },
         ],
+      },
+      {
+        path:'/translate',
+        element:<Translate/>,
       },
       {
         path: '/profile',
