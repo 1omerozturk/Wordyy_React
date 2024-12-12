@@ -74,28 +74,31 @@ const router = createBrowserRouter([
           },
           {
             path: 'wordylistedit/:id',
-            element: <WordyListEdit/>,
+            element: <WordyListEdit />,
           },
           {
             path: 'wordylist/:id',
-            element: <WordyListDetail/>,
+            element: <WordyListDetail />,
           },
         ],
       },
       {
-        path:'/translate',
-        element:<Translate/>,
+        path: '/translate',
+        element: (
+          <ProtectedRoute>
+            <Translate />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/profile',
         element: <Profile />,
-        children:[
+        children: [
           {
             path: 'profileedit/:id',
             element: <ProfileEdit />,
-
           },
-        ]
+        ],
       },
       {
         path: '/quiz',
