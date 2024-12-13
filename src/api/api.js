@@ -1,7 +1,7 @@
 import axios from 'axios'
 import showToast from '../alert/ShowToast'
-// const API = 'https://wordyy.onrender.com/api'
-const API = 'http://localhost:5050/api'
+const API = 'https://wordyy.onrender.com/api'
+// const API = 'http://localhost:5050/api'
 
 
 // -------------------------------------------------
