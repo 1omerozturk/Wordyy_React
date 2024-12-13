@@ -23,6 +23,10 @@ import { WordyListEdit } from './pages/WordyList/WordyListEdit'
 import { Profile } from './pages/User/Profile'
 import ProfileEdit from './pages/User/ProfileEdit'
 import { WordyListDetail } from './pages/WordyList/WordyListDetail'
+import AdminRoute from './components/Route/AdminRoute'
+import AdminWordy from './pages/User/Admin/AdminWordy'
+import Admin from './pages/User/Admin/Admin'
+import AdminUser from './pages/User/Admin/AdminUser'
 
 const router = createBrowserRouter([
   {
@@ -99,6 +103,24 @@ const router = createBrowserRouter([
             element: <ProfileEdit />,
           },
         ],
+      },
+      {
+        path: '/admin',
+        element: (
+          <AdminRoute>
+            <Admin />
+          </AdminRoute>
+        ),
+        children:[
+          {
+            path: 'wordy',
+            element: <AdminWordy />,
+          },
+          {
+            path: 'user',
+            element: <AdminUser />,
+          }
+        ]
       },
       {
         path: '/quiz',

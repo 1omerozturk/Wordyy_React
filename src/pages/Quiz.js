@@ -5,6 +5,9 @@ import { Spin } from '../components/Spinner/Spin'
 
 export default function Quiz() {
   const { user } = useContext(UserContext)
+  const [disabled, setDisabled] = useState(false)
+  const [bgColor, setBgColor] = useState('')
+  const [selectedOption, setSelectedOption] = useState(null)
   const [loading, setLoading] = useState(false)
   const [final, setFinal] = useState(false)
   const [index, setIndex] = useState(0)
@@ -26,7 +29,7 @@ export default function Quiz() {
     getQuizData()
       .then((res) => {
         setQuestions(res.data)
-        console.log(res.data)
+        // console.log(res.data)
       })
       .finally(() => {
         setLoading(false)
@@ -36,24 +39,6 @@ export default function Quiz() {
   useEffect(() => {
     getData()
   }, [])
-
-  // const questions = [
-  //   {
-  //     question: 'What is the capital of France?',
-  //     options: { a: 'Paris', b: 'London', c: 'Berlin', d: 'Madrid' },
-  //     correct: 'a',
-  //   },
-  //   {
-  //     question: 'What is the capital of Germany?',
-  //     options: { a: 'Berlin', b: 'Munich', c: 'Hamburg', d: 'Frankfurt' },
-  //     correct: 'a',
-  //   },
-  //   {
-  //     question: 'What is the capital of Italy?',
-  //     options: { a: 'Rome', b: 'Milan', c: 'Turin', d: 'Venice' },
-  //     correct: 'a',
-  //   },
-  // ];
 
   // Zamanlayıcı ve sınavın tamamlanma durumu
   useEffect(() => {
@@ -69,6 +54,7 @@ export default function Quiz() {
   useEffect(() => {
     if (index < questions?.length) {
       setCurrentQuestion(questions[index])
+      setSelectedOption(null)
       setOptions(questions[index]?.options)
     } else {
       stopQuiz()
@@ -76,10 +62,19 @@ export default function Quiz() {
   }, [index, questions])
 
   const handleAnswer = (selectedOption) => {
-    console.log(questions.length)
-    if (selectedOption.label === currentQuestion.correctAnswer)
+    setDisabled(true)
+    setSelectedOption(selectedOption)
+    if (selectedOption.label === currentQuestion.correctAnswer) {
+      setBgColor('correct')
       setScore(score + 1)
-    setIndex(index + 1)
+    } else {
+      setBgColor('incorrect')
+    }
+    setTimeout(() => {
+      setIndex(index + 1)
+      setBgColor(false)
+      setDisabled(false)
+    }, 750)
   }
 
   const startQuiz = () => {
@@ -102,28 +97,52 @@ export default function Quiz() {
             Wordy Quiz
           </div>
           {start ? (
-            <div className="grid md:w-1/2 lg:w-2/3 sm:w-full mx-auto bg-slate-400 rounded-md py-2 mt-3">
+            <div className="grid md:w-1/3 lg:w-3/5 sm:w-full mx-auto bg-slate-400 rounded-md py-2 mt-3">
               {loading ? (
                 <Spin color="primary" />
               ) : (
                 <>
-                  <p className="mx-auto font-semibold text-center w-7 h-7 border-2 border-red-500 rounded-full">
+                  <div
+                    className={`end-2 font-semibold text-center w-7 h-7 border-2  ${
+                      time > (questions.length * 5) / 2 ? 'border-lime-500' : ''
+                    } ${time < 20 ? 'border-orange-300' : ''} ${
+                      time < 10 ? 'border-red-500 animate-pulse' : ''
+                    } rounded-full`}
+                  >
                     {time}
-                  </p>
+                  </div>
+                  {start && (
+                    <div className="mx-auto mb-2 border drop-shadow-md shadow-black border-black font-semibold rounded-md">
+                      Score: <span className='font-bold px-1 text-indigo-500'>
+                        {score}
+                        </span>
+                    </div>
+                  )}
+
                   <div className="bg-slate-300 rounded-md text-center border-black border py-3">
                     <h2 className="font-bold">{currentQuestion?.question}</h2>
                   </div>
-                  <div className="grid grid-flow-row gap-4 p-2">
+                  <div  className="grid grid-flow-row space-y-4 p-2 md:px-10 lg:px-20">
                     {options?.map((option, i) => (
-                      <label
+                      <button
+                      disabled={disabled}
                         key={i}
                         onClick={() =>
                           handleAnswer(currentQuestion?.options[i])
                         }
-                        className="cursor-pointer border-2 w-3/4 mx-auto border-sky-200 rounded-xl text-center px-2 py-1"
+                        className={`${
+                          selectedOption === option
+                            ? bgColor === 'correct'
+                              ? 'bg-gradient-to-b from-lime-300 to-lime-600'
+                              : 'bg-gradient-to-b from-red-300 to-red-600'
+                            : selectedOption &&
+                              option.label === currentQuestion.correctAnswer
+                            ? 'bg-gradient-to-b from-lime-300 to-lime-600'
+                            : 'bg-slate-400'
+                        } cursor-pointer border-2 w-3/4 mx-auto border-sky-200 rounded-xl text-center p-2 font-sans font-semibold`}
                       >
                         {option.value}
-                      </label>
+                      </button>
                     ))}
                   </div>
                 </>
