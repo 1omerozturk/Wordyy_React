@@ -23,7 +23,6 @@ export const Profile = () => {
     setLoadingUpdate(true)
     getOtoWordy(userId)
       .then((res) => {
-        console.log(res)
       })
       .finally(() => {
         setLoadingUpdate(false)

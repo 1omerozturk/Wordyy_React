@@ -88,7 +88,7 @@ const Flashcards = ({ wordy, autoSlider }) => {
             ) : (
               ''
             )}
-            <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
+            <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-lg py-1">
               {wordy?.english} -{' '}
               <span className="text-slate-300">
                 {' '}
@@ -115,13 +115,13 @@ const Flashcards = ({ wordy, autoSlider }) => {
             ) : (
               ''
             )}
-            <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-xl py-1">
+            <div className="font-semibold md:w-full mt-2 mx-auto block font-serif text-center md:text-2xl lg:text-3xl text-sm py-1">
               {wordy?.turkish} -
               <span className="text-slate-300">
                 ( {wordy?.type?.split('-', 2)[1]} )
               </span>
             </div>
-            <hr className="bg-white text-white rounded-xl py-1" />
+            <hr className="text-white bg-white rounded-xl py-1" />
             <div className="md:w-full w-2/3 mx-auto text-base md:text-lg px-2 lg:text-xl">
               {wordy?.turkishExample}
             </div>

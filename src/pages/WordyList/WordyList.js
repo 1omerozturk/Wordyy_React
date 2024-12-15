@@ -44,7 +44,7 @@ export const WordyList = () => {
   }
 
   const handleDetail = (id) => {
-    navigate(`wordylist/${id}`)
+    navigate(`/wordylist/${id}`)
   }
 
   const deleteWordyList = (id) => {
@@ -95,18 +95,16 @@ export const WordyList = () => {
                     >
                       <div
                         key={index}
-                        className="flex w-full items-end justify-end gap-2 px-3"
+                        className="flex w-full items-end justify-end gap-x-5 px-3"
                       >
                         <MdDelete
                           onClick={() => deleteWordyList(item._id)}
-                          className="flex rounded-full border-2 border-red-500 border-opacity-30 hover:border-opacity-100"
-                          size={30}
+                          className="flex rounded-full border-2 size-7 md:size-9 border-red-500 border-opacity-30 hover:border-opacity-100"
                           color="red"
                         />
                         <MdEdit
                           onClick={() => editWordyList(item._id)}
-                          className="flex border-2 border-orange-300 border-opacity-30 hover:border-opacity-100  p-0.5 rounded-full"
-                          size={30}
+                          className="flex border-2 border-orange-300 border-opacity-30 hover:border-opacity-100  p-0.5 rounded-full  size-7 md:size-9"
                           color="orange"
                         />
                       </div>

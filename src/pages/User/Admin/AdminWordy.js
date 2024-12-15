@@ -7,9 +7,9 @@ import showToast from '../../../alert/ShowToast'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 const AdminWordy = () => {
-  const [selectedOption, setSelectedOption] = useState(null)
   const [loading, setLoading] = useState(true)
   const [wordies, setWordies] = useState(null)
+  const [selectedOption, setSelectedOption] = useState(null)
   const [round, setRound] = useState(false)
   const navigate = useNavigate()
 
@@ -35,7 +35,7 @@ const AdminWordy = () => {
   const onDelete = (id) => {
     deleteWordy(id).then((res) => {
       if (res.status === 200) {
-        showToast('Wordy deleted.', 'success')
+        showToast(`${res?.data?.message}`, 'success')
         setWordies(wordies.filter((wordy) => wordy._id !== id))
       }
     })

@@ -81,7 +81,7 @@ const router = createBrowserRouter([
             element: <WordyListEdit />,
           },
           {
-            path: 'wordylist/:id',
+            path: ':id',
             element: <WordyListDetail />,
           },
         ],

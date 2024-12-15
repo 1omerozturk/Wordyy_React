@@ -92,18 +92,18 @@ export default function Quiz() {
     <div>
       {!questions && <Spin color="danger" />}
       {questions && (
-        <div className="pt-5 -sm:w-[500px] mx-auto w-full h-screen bg-gradient-to-b from-slate-300 to-lime-200">
-          <div className="mx-auto p-2  text-5xl font-bold select-none bg-gradient-to-tr from-lime-200 rounded-md to-lime-700 w-fit">
+        <div className="pt-5  mx-auto w-full h-screen bg-gradient-to-b from-slate-300 to-lime-200">
+          {/* <div className="mx-auto p-2  text-5xl font-bold select-none bg-gradient-to-tr from-lime-200 rounded-md to-lime-700 w-fit">
             Wordy Quiz
-          </div>
+          </div> */}
           {start ? (
-            <div className="grid md:w-1/3 lg:w-3/5 sm:w-full mx-auto bg-slate-400 rounded-md py-2 mt-3">
+            <div className="mx-auto bg-slate-400 rounded-md py-2 mt-3">
               {loading ? (
                 <Spin color="primary" />
               ) : (
                 <>
                   <div
-                    className={`end-2 font-semibold text-center w-7 h-7 border-2  ${
+                    className={`mx-auto mb-2 font-semibold text-center w-7 h-7 border-2  ${
                       time > (questions.length * 5) / 2 ? 'border-lime-500' : ''
                     } ${time < 20 ? 'border-orange-300' : ''} ${
                       time < 10 ? 'border-red-500 animate-pulse' : ''
@@ -112,7 +112,7 @@ export default function Quiz() {
                     {time}
                   </div>
                   {start && (
-                    <div className="mx-auto mb-2 border drop-shadow-md shadow-black border-black font-semibold rounded-md">
+                    <div className="mx-auto mb-2 w-fit border drop-shadow-md shadow-black border-black font-semibold rounded-md">
                       Score: <span className='font-bold px-1 text-indigo-500'>
                         {score}
                         </span>
@@ -147,7 +147,7 @@ export default function Quiz() {
                   </div>
                 </>
               )}
-              <div className="flex flex-flow gap-2 justify-center mt-5">
+              <div className="grid grid-flow-col text-center mx-auto max-w-fit gap-2 overflow-x-auto mt-5">
                 {questions.map((_, idx) => {
                   const isCurrent = idx === index // Şu anki soru
                   const isPassed = idx < index // Geçilen sorular
@@ -164,6 +164,9 @@ export default function Quiz() {
                     </div>
                   )
                 })}
+              </div>
+              <div className='flex items-center justify-center mt-5'>
+                <button onClick={stopQuiz} className='btn btn-danger'>Finish</button>
               </div>
             </div>
           ) : (

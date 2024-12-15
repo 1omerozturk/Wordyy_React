@@ -3,7 +3,6 @@ import showToast from '../alert/ShowToast'
 const API = 'https://wordyy.onrender.com/api'
 // const API = 'http://localhost:5050/api'
 
-
 // -------------------------------------------------
 // User API
 // -------------------------------------------------
@@ -39,7 +38,7 @@ export const getUser = async (id) => {
   return response.data
 }
 
-export const getAllUsers=async()=>{
+export const getAllUsers = async () => {
   try {
     const token = getToken()
     const response = await axios.get(`${API}/user/users`, {
@@ -47,12 +46,10 @@ export const getAllUsers=async()=>{
         Authorization: `Bearer ${token}`,
       },
     })
-    return response.data;
-    
+    return response.data
   } catch (error) {
-    console.error(error.response ? error.response.data : error.message);
+    console.error(error.response ? error.response.data : error.message)
   }
-      
 }
 
 export const updateUser = async (id, data) => {
@@ -82,19 +79,16 @@ export const updateUser = async (id, data) => {
     }
   }
 }
-export const deleteUser=async(id)=>{
-  try{
+export const deleteUser = async (id) => {
+  try {
     const token = getToken()
-    const response=await axios.delete(`${API}/user/${id}`,
-      {
-        headers:{
-          Authorization:`Bearer ${token}`
-          },
-      }
-    );
-    return response;
-  }
-  catch(error){
+    const response = await axios.delete(`${API}/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+  } catch (error) {
     console.error(error.response ? error.response.data : error.message)
   }
 }
@@ -122,20 +116,6 @@ export const getWordy = async (id) => {
   try {
     const token = getToken()
     const response = await axios.get(`${API}/wordy/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    return response.data
-  } catch (error) {
-    console.error(error.response ? error.response.data : error.message)
-  }
-}
-
-export const getWordysIds = async (ids) => {
-  try {
-    const token = getToken()
-    const response = await axios.post(`${API}/wordy/list`, ids, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -247,7 +227,21 @@ export const getAllWordyList = async (userId) => {
     }
   }
 }
-
+export const getWordyListData = async (id) => {
+  if (id) {
+    try {
+      const token = getToken()
+      const response = await axios.get(`${API}/wordylist/list/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response
+    } catch (error) {
+      console.error(error.response ? error.response.data : error.message)
+    }
+  }
+}
 export const addWordyWordyList = async (wListId, wordyId) => {
   try {
     const token = getToken()
@@ -323,7 +317,6 @@ export const updateWordyListById = async (userId, id, data) => {
     console.error(error.response ? error.response.data : error.message)
   }
 }
-
 
 // -----------------------------------------
 // Translate API
