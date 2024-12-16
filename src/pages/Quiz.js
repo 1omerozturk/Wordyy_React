@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from './User/UserContext'
-import { getQuizData } from '../api/api'
+import { getQuizData, getQuizDataId, getWordyListById } from '../api/api'
 import { Spin } from '../components/Spinner/Spin'
+import { useParams } from 'react-router-dom'
 
 export default function Quiz() {
+  const { id } = useParams()
+  const [wordyList, setWrodyList] = useState({})
   const { user } = useContext(UserContext)
   const [disabled, setDisabled] = useState(false)
   const [bgColor, setBgColor] = useState('')
@@ -26,19 +29,24 @@ export default function Quiz() {
   }, [user])
 
   const getData = () => {
-    getQuizData()
-      .then((res) => {
-        setQuestions(res.data)
-        // console.log(res.data)
+    if (id && userId) {
+      getQuizDataId(id).then((res) => {
+        setQuestions(res?.data)
       })
-      .finally(() => {
-        setLoading(false)
+      getWordyListById(userId, id).then((res) => {
+        setWrodyList(res?.data)
       })
+    } else {
+      getQuizData().then((res) => {
+        setQuestions(res?.data)
+      })
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [userId])
 
   // Zamanlayıcı ve sınavın tamamlanma durumu
   useEffect(() => {
@@ -113,19 +121,20 @@ export default function Quiz() {
                   </div>
                   {start && (
                     <div className="mx-auto mb-2 w-fit border drop-shadow-md shadow-black border-black font-semibold rounded-md">
-                      Score: <span className='font-bold px-1 text-indigo-500'>
+                      Score:{' '}
+                      <span className="font-bold px-1 text-indigo-500">
                         {score}
-                        </span>
+                      </span>
                     </div>
                   )}
 
                   <div className="bg-slate-300 rounded-md text-center border-black border py-3">
                     <h2 className="font-bold">{currentQuestion?.question}</h2>
                   </div>
-                  <div  className="grid grid-flow-row space-y-4 p-2 md:px-10 lg:px-20">
+                  <div className="grid grid-flow-row space-y-4 p-2 md:px-10 lg:px-20">
                     {options?.map((option, i) => (
                       <button
-                      disabled={disabled}
+                        disabled={disabled}
                         key={i}
                         onClick={() =>
                           handleAnswer(currentQuestion?.options[i])
@@ -165,24 +174,40 @@ export default function Quiz() {
                   )
                 })}
               </div>
-              <div className='flex items-center justify-center mt-5'>
-                <button onClick={stopQuiz} className='btn btn-danger'>Finish</button>
+              <div className="flex items-center justify-center mt-5">
+                <button onClick={stopQuiz} className="btn btn-danger">
+                  Finish
+                </button>
               </div>
             </div>
           ) : (
-            <button
-              className="bg-sky-500 flex mx-auto hover:bg-sky-700 text-white font-bold py-2 px-4 rounded mt-5"
-              onClick={startQuiz}
-            >
-              Start Quiz
-            </button>
+            <div className="text-center space-y-1">
+              <button disabled className='btn btn-dark font-bold  rounded'>
+
+              {wordyList.name}
+                <input
+                  type="radio"
+                  name="wordylist"
+                  value={wordyList.name}
+                  checked
+                  className="ml-2"
+                  />
+                  </button>
+                
+              <button 
+                className="bg-sky-500 flex mx-auto hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+                onClick={startQuiz}
+              >
+                Start Quiz
+              </button>
+            </div>
           )}
           <div
             className={`my-4 outline-double bg-sky-500 w-fit mx-auto outline-3 rounded-2xl outline-indigo-500 px-1 ${
               !start && time !== 0 ? '' : 'collapse'
             }`}
           >
-            {final && (
+            {!start && final && (
               <p className={`mx-auto text-center font-semibold`}>
                 Score: {score}
               </p>

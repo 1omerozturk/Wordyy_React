@@ -1,7 +1,7 @@
 import axios from 'axios'
 import showToast from '../alert/ShowToast'
-const API = 'https://wordyy.onrender.com/api'
-// const API = 'http://localhost:5050/api'
+// const API = 'https://wordyy.onrender.com/api'
+const API = 'http://localhost:5050/api'
 
 // -------------------------------------------------
 // User API
@@ -208,6 +208,22 @@ export const getQuizData = async () => {
     console.error(error.response ? error.response.data : error.message)
   }
 }
+
+export const getQuizDataId = async (id) => {
+  try {
+    const token = getToken()
+    const response = await axios.get(`${API}/quiz/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+
 
 //--------------------------------------
 // WordyList API

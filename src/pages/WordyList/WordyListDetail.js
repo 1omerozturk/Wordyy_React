@@ -70,7 +70,7 @@ export const WordyListDetail = () => {
           <h1>{wordyList?.name}</h1>
           <div className="w-fit border "></div>
           <div>{wordys?.length}</div>
-          <div className="grid grid-flow-row space-y-3 max-h-[150px] w-auto mx-auto overflow-y-auto">
+          <div className="grid grid-flow-row space-y-3 max-h-[200px] w-auto mx-auto overflow-y-auto">
             {wordys?.map((wordy) => (
               <div
                 onClick={() => onChange(wordy)}

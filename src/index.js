@@ -111,7 +111,7 @@ const router = createBrowserRouter([
             <Admin />
           </AdminRoute>
         ),
-        children:[
+        children: [
           {
             path: 'wordy',
             element: <AdminWordy />,
@@ -119,11 +119,19 @@ const router = createBrowserRouter([
           {
             path: 'user',
             element: <AdminUser />,
-          }
-        ]
+          },
+        ],
       },
       {
         path: '/quiz',
+        element: (
+          <ProtectedRoute>
+            <Quiz />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/quiz/:id',
         element: (
           <ProtectedRoute>
             <Quiz />
