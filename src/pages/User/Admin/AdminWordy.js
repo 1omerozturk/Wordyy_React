@@ -50,7 +50,7 @@ const AdminWordy = () => {
   }, [])
 
   return (
-    <div className="text-center">
+    <div className="text-center my-3">
       {loading ? (
         <Spin color={'danger'} />
       ) : (

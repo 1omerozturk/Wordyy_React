@@ -209,6 +209,22 @@ export const getQuizData = async () => {
   }
 }
 
+export const getQuizDataId = async (id) => {
+  try {
+    const token = getToken()
+    const response = await axios.get(`${API}/quiz/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+
+
 //--------------------------------------
 // WordyList API
 

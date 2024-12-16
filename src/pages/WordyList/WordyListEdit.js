@@ -86,6 +86,7 @@ export const WordyListEdit = () => {
                 type="text"
                 placeholder="Name"
                 name="name"
+                autoFocus
                 required
                 className="w-full col-span-10 text-md px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500"
                 value={wordyListData.name}

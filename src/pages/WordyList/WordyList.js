@@ -47,6 +47,10 @@ export const WordyList = () => {
     navigate(`/wordylist/${id}`)
   }
 
+  const handleQuiz = (id) => {
+    navigate(`/quiz/${id}`)
+  }
+
   const deleteWordyList = (id) => {
     try {
       const userId = user?._id
@@ -68,7 +72,7 @@ export const WordyList = () => {
   }, [wordyList])
 
   return (
-    <div className="text-center w-full min-h-dvh bg-gradient-to-b from-slate-300 to-sky-200">
+    <div className="text-center w-full h-full pb-5 bg-gradient-to-b from-slate-300 to-sky-200">
       <Outlet />
 
       <NavLink
@@ -127,6 +131,15 @@ export const WordyList = () => {
                             {convertTime(item?.created)}
                           </div>
                         </div>
+                      </div>
+
+                      <div className="w-fit mx-auto">
+                        <button
+                          onClick={() => handleQuiz(item._id)}
+                          className="btn btn-info"
+                        >
+                          Quiz
+                        </button>
                       </div>
                     </div>
                   </div>

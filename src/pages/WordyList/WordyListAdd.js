@@ -1,12 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { FaWindowClose } from 'react-icons/fa'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import { UserContext } from '../User/UserContext'
 import { createWordyList, getWordy } from '../../api/api'
 import showToast from '../../alert/ShowToast'
 
 export const WordyListAdd = () => {
   const { id } = useParams()
+  const navigate=useNavigate()
   const [size, setSize] = useState(0)
   const [data, setData] = useState({})
 
@@ -54,7 +55,8 @@ export const WordyListAdd = () => {
           setFormData({
             name: '',
             wordies: [],
-          })
+          });
+          navigate('/wordylist')
         } else {
           showToast('Failed to add wordy', 'error')
         }
@@ -81,6 +83,7 @@ export const WordyListAdd = () => {
               <input
                 type="text"
                 placeholder="Name"
+                autoFocus
                 name="name"
                 required
                 className="w-full col-span-10 text-md px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500"
