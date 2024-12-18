@@ -32,6 +32,7 @@ export default function Quiz() {
     if (id && userId) {
       getQuizDataId(id).then((res) => {
         setQuestions(res?.data)
+        console.log(res?.data)
       })
       getWordyListById(userId, id).then((res) => {
         setWrodyList(res?.data)
@@ -111,7 +112,7 @@ export default function Quiz() {
               ) : (
                 <>
                   <div
-                    className={`mx-auto mb-2 font-semibold text-center w-7 h-7 border-2  ${
+                    className={`mx-auto mb-2 font-semibold text-center w-8 h-8 p-0.5 border-2  ${
                       time > (questions.length * 5) / 2 ? 'border-lime-500' : ''
                     } ${time < 20 ? 'border-orange-300' : ''} ${
                       time < 10 ? 'border-red-500 animate-pulse' : ''
@@ -182,19 +183,20 @@ export default function Quiz() {
             </div>
           ) : (
             <div className="text-center space-y-1">
-              <button disabled className='btn btn-dark font-bold  rounded'>
-
-              {wordyList.name}
-                <input
-                  type="radio"
-                  name="wordylist"
-                  value={wordyList.name}
-                  checked
-                  className="ml-2"
+              {id && (
+                <button disabled className="btn btn-dark font-bold  rounded">
+                  {wordyList.name}
+                  <input
+                    type="radio"
+                    name="wordylist"
+                    value={wordyList.name}
+                    checked
+                    className="ml-2"
                   />
-                  </button>
-                
-              <button 
+                </button>
+              )}
+
+              <button
                 className="bg-sky-500 flex mx-auto hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
                 onClick={startQuiz}
               >

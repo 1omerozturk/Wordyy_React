@@ -178,14 +178,18 @@ export const deleteWordy = async (id) => {
   }
 }
 
-export const getOtoWordy = async () => {
+export const getOtoWordy = async (level, difficult) => {
   try {
     const token = getToken()
-    const response = await axios.get(`${API}/user/otocreate`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await axios.post(
+      `${API}/user/otocreate`,
+      { level:level, difficult:difficult },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
     return response
   } catch (error) {
     console.error(error.response ? error.response.data : error.message)
@@ -222,8 +226,6 @@ export const getQuizDataId = async (id) => {
     console.error(error.response ? error.response.data : error.message)
   }
 }
-
-
 
 //--------------------------------------
 // WordyList API
