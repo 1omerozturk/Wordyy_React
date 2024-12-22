@@ -183,7 +183,7 @@ export const getOtoWordy = async (level, difficult) => {
     const token = getToken()
     const response = await axios.post(
       `${API}/user/otocreate`,
-      { level:level, difficult:difficult },
+      { level: level, difficult: difficult },
       {
         headers: {
           Authorization: `Bearer ${token}`,
