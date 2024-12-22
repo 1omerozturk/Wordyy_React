@@ -189,7 +189,7 @@ export const Profile = () => {
                 {profile.role === 'admin' && (
                   <button
                     onClick={() => navigate('/admin')}
-                    className="btn btn-outline-light w-fit mx-auto mt-5"
+                    className="btn btn-dark w-fit mx-auto mt-5"
                   >
                     Admin Page
                   </button>

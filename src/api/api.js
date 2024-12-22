@@ -1,7 +1,7 @@
 import axios from 'axios'
 import showToast from '../alert/ShowToast'
-const API = 'https://wordyy.onrender.com/api'
-// const API = 'http://localhost:5050/api'
+// const API = 'https://wordyy.onrender.com/api'
+const API = 'http://localhost:5050/api'
 
 // -------------------------------------------------
 // User API
@@ -183,7 +183,7 @@ export const getOtoWordy = async (level, difficult) => {
     const token = getToken()
     const response = await axios.post(
       `${API}/user/otocreate`,
-      { level:level, difficult:difficult },
+      { level: level, difficult: difficult },
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -4,9 +4,11 @@ import { updateUser } from '../../api/api'
 import showToast from '../../alert/ShowToast'
 import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import { FaSignInAlt, FaUserEdit, FaWindowClose } from 'react-icons/fa'
+import { Spin } from '../../components/Spinner/Spin'
 
 function ProfileEdit() {
   const { id } = useParams()
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: '',
@@ -24,6 +26,7 @@ function ProfileEdit() {
   }
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault()
     const data = new FormData()
     data.append('email', formData.email)
@@ -45,12 +48,14 @@ function ProfileEdit() {
       } else {
         showToast('An unexpected error occurred', 'error')
       }
+      setLoading(false)
     } catch (error) {
       console.error('Frontend error:', error)
       const message =
         error?.response?.data?.message ||
         'A network error occurred. Please try again.'
       showToast(message, 'error')
+      setLoading(false)
     }
   }
 
@@ -105,9 +110,13 @@ function ProfileEdit() {
               className="bg-white col-span-4 w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
           </div>
-          <button className="btn btn-outline-secondary" type="submit">
-            Update Profile
-          </button>
+          {loading ? (
+            <Spin color="dark" />
+          ) : (
+            <button className="btn btn-outline-secondary" type="submit">
+              Update Profile
+            </button>
+          )}
         </form>
       </div>
     </div>
