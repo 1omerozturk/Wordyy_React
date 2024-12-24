@@ -5,11 +5,14 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Spin } from '../../components/Spinner/Spin'
 import { MdDelete, MdEdit } from 'react-icons/md'
 import showToast from '../../alert/ShowToast'
+import { FaSearch } from 'react-icons/fa'
 
 export const WordyList = () => {
   const [wordyList, setWordyList] = useState([])
+  const [allWordyList, setAllWordyList] = useState([])
   const { user } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -19,6 +22,7 @@ export const WordyList = () => {
     response
       .then((res) => {
         setWordyList(res?.data?.wordyLists)
+        setAllWordyList(res?.data?.wordyLists)
       })
       .finally(() => {
         setLoading(false)
@@ -67,9 +71,25 @@ export const WordyList = () => {
     navigate(`wordylistedit/${id}`)
   }
 
+  const onChangeSearch = (e) => {
+    setSearch(e.target.value)
+  }
+
   useEffect(() => {
     loadData()
-  }, [wordyList])
+  }, [])
+
+  useEffect(() => {
+    if (search !== '') {
+      const filteredWordyList = allWordyList.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase()),
+      )
+      setWordyList(filteredWordyList)
+    }
+    else{
+      loadData()
+    }
+  }, [search])
 
   return (
     <div className="text-center w-full h-full pb-5 bg-gradient-to-b from-slate-300 to-sky-200">
@@ -83,6 +103,19 @@ export const WordyList = () => {
           New WordyList
         </div>
       </NavLink>
+      <div className="flex float-right w-3/5 space-x-2 px-3 my-2">
+        <FaSearch
+          size={30}
+          className="text-blue-500 cursor-pointer hover:text-black"
+        />
+        <input
+          onChange={onChangeSearch}
+          type="search"
+          className="form-control"
+          placeholder="Search"
+          aria-label="Search"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {loading ? (
           <div className="h-0 col-span-full my-10 mx-auto w-1/2 flex items-center justify-center">

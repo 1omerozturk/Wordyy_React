@@ -89,10 +89,11 @@ const Flashcards = ({ wordy, autoSlider }) => {
               ''
             )}
             <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-lg py-1">
-              {wordy?.english} -{' '}
+              {wordy?.english} - {' '}
               <span className="text-slate-300">
-                {' '}
-                ( {wordy?.type?.split('-', 1)})
+              ( {wordy?.type?.map((t)=>{
+                  return t.split('-', 1)
+                })} )
               </span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
@@ -116,9 +117,11 @@ const Flashcards = ({ wordy, autoSlider }) => {
               ''
             )}
             <div className="font-semibold md:w-full mt-2 mx-auto block font-serif text-center md:text-2xl lg:text-3xl text-sm py-1">
-              {wordy?.turkish} -
+              {wordy?.turkish} - {' '}
               <span className="text-slate-300">
-                ( {wordy?.type?.split('-', 2)[1]} )
+                ( {wordy?.type?.map((t)=>{
+                  return t.split('-', )[1]
+                })} )
               </span>
             </div>
             <hr className="text-white bg-white rounded-xl py-1" />

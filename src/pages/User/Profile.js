@@ -39,6 +39,7 @@ export const Profile = () => {
     if (level && difficult) {
       getOtoWordy(level, difficult)
         .then((res) => {
+          console.log(res)
           if (res.status === 201) {
             showToast(res.data.message, 'info')
           }

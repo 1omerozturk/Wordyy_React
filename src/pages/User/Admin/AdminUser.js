@@ -11,12 +11,14 @@ const AdminUser = () => {
   const [round, setRound] = useState(false)
   const [loading, setLoading] = useState(true)
   const [users, setUsers] = useState(null)
+  const [allUsers, setAllUsers] = useState(null)
   const navigate = useNavigate()
 
   const getData = () => {
     getAllUsers()
       .then((res) => {
         setUsers(res)
+        setAllUsers(res)
       })
       .finally(() => {
         setLoading(false)
@@ -51,6 +53,19 @@ const AdminUser = () => {
 
   return (
     <div className="text-center">
+      <div className="text-2xl font-bold">Users</div>
+      <div className="flex justify-center">
+        <input
+          type="search"
+          placeholder="Search"
+          className="w-1/2 p-2 my-2 border border-black rounded-md"
+          onChange={(e) =>
+            setUsers(
+              allUsers.filter((user) => user.username.includes(e.target.value)),
+            )
+          }
+        />
+      </div>
       {loading ? (
         <Spin color={'danger'} />
       ) : (
@@ -64,7 +79,7 @@ const AdminUser = () => {
                   : ''
               }`}
             >
-              <div className='' key={user._id}>
+              <div className="" key={user._id}>
                 {user.username}
 
                 <div
