@@ -3,7 +3,7 @@ import { useSwipeable } from 'react-swipeable'
 import './FlashCards.css'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { MdOutlineBrightnessAuto } from 'react-icons/md'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import getRandomColor from '../../components/Color/GetRandomColor'
 import { Dropdown } from './Dropdown'
 import { UserContext } from '../User/UserContext'
@@ -89,11 +89,13 @@ const Flashcards = ({ wordy, autoSlider }) => {
               ''
             )}
             <div className="font-semibold font-serif flex items-center justify-center md:text-2xl lg:text-3xl text-lg py-1">
-              {wordy?.english} - {' '}
+              {wordy?.english} -{' '}
               <span className="text-slate-300">
-              ( {wordy?.type?.map((t)=>{
+                ({' '}
+                {wordy?.type?.map((t) => {
                   return t.split('-', 1)
-                })} )
+                })}{' '}
+                )
               </span>
             </div>
             <hr className="bg-white text-white rounded-xl py-1" />
@@ -117,11 +119,13 @@ const Flashcards = ({ wordy, autoSlider }) => {
               ''
             )}
             <div className="font-semibold md:w-full mt-2 mx-auto block font-serif text-center md:text-2xl lg:text-3xl text-sm py-1">
-              {wordy?.turkish} - {' '}
+              {wordy?.turkish} -{' '}
               <span className="text-slate-300">
-                ( {wordy?.type?.map((t)=>{
-                  return t.split('-', )[1]
-                })} )
+                ({' '}
+                {wordy?.type?.map((t) => {
+                  return t.split('-')[1]
+                })}{' '}
+                )
               </span>
             </div>
             <hr className="text-white bg-white rounded-xl py-1" />
@@ -161,10 +165,11 @@ const Flashcards = ({ wordy, autoSlider }) => {
   )
 }
 
-const FlashcardList = ({ words }) => {
+const FlashcardList = ({ words, index, setIndex }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [user, setUser] = useState(null)
   const [autoSlider, setAutoSlider] = useState(false)
+  const location = useLocation()
 
   const getCurrentUser = () => {
     setUser(localStorage.getItem('token'))
@@ -175,13 +180,21 @@ const FlashcardList = ({ words }) => {
   }, [])
 
   useEffect(() => {
+    setCurrentIndex(index)
+  }, [index])
+
+  useEffect(() => {
     if (autoSlider) {
       const intervalId = setInterval(() => {
-        setCurrentIndex((currentIndex) => (currentIndex + 1) % words.length)
+        setCurrentIndex((prevIndex) => {
+          const newIndex = (prevIndex + 1) % words.length
+          setIndex(newIndex) // Update the parent component's index
+          return newIndex
+        })
       }, 7000)
       return () => clearInterval(intervalId)
     }
-  }, [autoSlider])
+  }, [autoSlider, words.length, setIndex])
 
   const handleAutoSlider = () => {
     setAutoSlider(!autoSlider)
@@ -230,7 +243,10 @@ const FlashcardList = ({ words }) => {
           }`}
           onClick={handleAutoSlider}
         >
-          <MdOutlineBrightnessAuto className="float-right ml-2 hover:animate-spin" size={25} />
+          <MdOutlineBrightnessAuto
+            className="float-right ml-2 hover:animate-spin"
+            size={25}
+          />
           {`${autoSlider ? 'Stop' : 'Start'}`}
         </button>
       </div>
@@ -294,13 +310,25 @@ const FlashcardList = ({ words }) => {
           <div>
             {user === null ? (
               <div>
-                Please{' '}
-                <NavLink
-                  className="text-sky-500 hover:text-gray-600"
-                  to="/login"
-                >
-                  Login
-                </NavLink>{' '}
+                {location.pathname === '/wordy' ? (
+                  <>
+                    <NavLink
+                      className="text-sky-500 hover:text-gray-600"
+                      to="/login"
+                    >
+                      Login
+                    </NavLink>{' '}
+                  </>
+                ) : (
+                  <>
+                    <NavLink
+                      className="text-sky-500 hover:text-gray-600"
+                      to="/wordy"
+                    >
+                      Wordy
+                    </NavLink>{' '}
+                  </>
+                )}
                 for more than{' '}
                 <span className="font-serif text-white bg-indigo-600 rounded-lg px-1">
                   Wordy Card

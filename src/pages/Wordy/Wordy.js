@@ -1,47 +1,84 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import FlashcardList from '../Card/FlashCards'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { getAllWords } from '../../api/api'
 import { Spin } from '../../components/Spinner/Spin'
+import { UserContext } from '../User/UserContext'
 export default function Wordy() {
-  const [wordyData, setWordyData] = useState([])
+  const user = useContext(UserContext)
+  const [userId, setUserId] = useState('')
+  const [index, setIndex] = useState(0)
+  const [wordyData, setWordyData] = useState({})
   const [acvite, setActive] = useState(false)
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false)
   const location = useLocation()
+
+
   const loadData = () => {
     getAllWords().then((data) => {
       setWordyData(data)
-      setInterval(()=>{
+      setInterval(() => {
         setLoading(true)
-      },400)
+      }, 400)
     })
   }
   useEffect(() => {
     loadData()
-  }, [wordyData])
+  }, [wordyData,index])
+
+  useEffect(() => {
+    if (user?._id) {
+      setUserId(user._id)
+    }
+  }, [user])
 
   return (
     <div className="pt-5 w-full mx-auto h-fit">
       <Outlet />
-      <NavLink
-      className={`${location.pathname==='/wordy/wordyadd'?"collapse":""} flex items-center justify-end animate-pulse hover:animate-none`}
-        to={`${
-          location.pathname === '/wordy/wordyadd'
-            ? '/wordy'
-            : 'wordyadd'
-        }`}
-        style={{ textDecoration: 'none' }}
-        onClick={() => setActive(!acvite)}
-      >
-        <div className="text-white bg-purple-500 hover:bg-purple-800 hover:text-black p-1 border-2 border-indigo-500  rounded-md flex  mt-2 w-fit">
-          Wordy Add
+      {user && user?.role === 'admin' ? (
+        <NavLink
+          className={`${
+            location.pathname === '/wordy/wordyadd' ? 'collapse' : ''
+          } flex items-center justify-end animate-pulse hover:animate-none`}
+          to={`${
+            location.pathname === '/wordy/wordyadd' ? '/wordy' : 'wordyadd'
+          }`}
+          style={{ textDecoration: 'none' }}
+          onClick={() => setActive(!acvite)}
+        >
+          <div className="text-white bg-purple-500 hover:bg-purple-800 hover:text-black p-1 border-2 border-indigo-500  rounded-md flex  mt-2 w-fit">
+            Wordy Add
+          </div>
+        </NavLink>
+      ) : (
+        ''
+      )}
+      {!loading ? (
+        <div className="text-center">
+          <Spin color={'warning'} />
         </div>
-      </NavLink>
-      {!loading?(
-        <div className='text-center'>
-        <Spin color={"warning"}/>
+      ) : (
+        <div>
+
+        <FlashcardList words={wordyData} index={index} setIndex={setIndex} />
+        
+        <div className="grid grid-flow-col text-center mx-auto max-w-fit gap-4 px-5 overflow-x-auto mt-5">
+        {wordyData.map((_, idx) => {
+          const isCurrent = idx === index // Şu anki wordy
+          const baseClass = 'rounded-md text-center p-1 border' // Ortak sınıflar
+          const bgClass = isCurrent
+            ? 'bg-slate-600' // Şu anki wordy
+            : 'bg-slate-200' 
+
+            return (
+              <div key={idx} className={`${baseClass} ${bgClass} cursor-pointer my-2 px-2`} onClick={() => setIndex(idx)} title={_.english} >
+              {idx + 1}
+            </div>
+          )
+        })}
         </div>
-      ):(<FlashcardList words={wordyData} />)}
+      </div>
+      )}
     </div>
   )
 }

@@ -40,15 +40,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/wordy',
-        element: (
-          <ProtectedRoute>
-            <Wordy />
-          </ProtectedRoute>
-        ),
+        element: <Wordy />,
         children: [
           {
             path: 'wordyedit/:id',
-            element: <WordyEdit />,
+            element: (
+              <ProtectedRoute>
+                <WordyEdit />,
+              </ProtectedRoute>
+            ),
           },
           {
             path: 'wordyadd',

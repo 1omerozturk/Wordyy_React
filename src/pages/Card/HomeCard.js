@@ -1,16 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {
-  Card,
-  CardGroup,
-  CardImg,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  CardText,
-  Button,
-  UncontrolledCarousel,
-} from 'reactstrap'
-import { words } from '../Wordy/Wordy'
 import FlashcardList from './FlashCards'
 import { getAllWords } from '../../api/api'
 import { Spin } from '../../components/Spinner/Spin'
@@ -20,18 +8,13 @@ export default function HomeCard() {
   const { user } = useContext(UserContext)
   const [wordyData, setWordyData] = useState([])
   const [loading, setLoading] = useState(true)
-  const [token, setToken] = useState(null)
 
-  useEffect(() => {
-    if (user) {
-      setToken(user)
-    }
-  }, [user])
 
   const loadData = () => {
     if (!user) {
-      setWordyData(words.slice(3, 6))
-      setLoading(false)
+      getAllWords().then((data) => {
+       setWordyData(data.slice(0, 10))
+        setLoading(false)})
     } else {
       getAllWords().then((data) => {
         setWordyData(data)
@@ -50,7 +33,7 @@ export default function HomeCard() {
           <Spin color={'primary'} />
         </div>
       ) : (
-        <FlashcardList words={wordyData} />
+        <FlashcardList words={wordyData} index={0} />
       )}
     </div>
   )

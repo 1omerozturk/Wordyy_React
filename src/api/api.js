@@ -99,13 +99,7 @@ export const deleteUser = async (id) => {
 
 export const getAllWords = async () => {
   try {
-    const token = getToken()
-
-    const response = await axios.get(`${API}/wordy`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const response = await axios.get(`${API}/wordy`)
     return response.data
   } catch (error) {
     console.error(error.response ? error.response.data : error.message)
