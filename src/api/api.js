@@ -351,6 +351,16 @@ export const translateEnToTr = async (text) => {
   }
 }
 
+export const sentenceStructure=async(text)=>{
+  try {
+    const response = await axios.post(`${API}/translate/structure`, { text: text })
+    return response
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message)
+  }
+}
+
+
 // ------------------------------------
 // User Log check function
 export const getToken = () => {

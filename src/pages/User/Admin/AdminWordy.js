@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { deleteWordy, getAllWords } from '../../../api/api'
 import {
-  FaAdjust,
-  FaEdit,
   FaFilter,
-  FaRemoveFormat,
   FaSearch,
+  FaSortNumericDown,
+  FaSortNumericUp,
   FaTrash,
 } from 'react-icons/fa'
 import { FaPencil } from 'react-icons/fa6'
@@ -57,6 +56,20 @@ const AdminWordy = () => {
     setSearch(e.target.value.toLowerCase())
   }
 
+  const onSortDate = () => {
+    const sorted = [...wordies].sort((a, b) => {
+      return new Date(a.created_at) - new Date(b.created_at)
+    })
+    setWordies(sorted)
+  }
+
+  const onSortReverseDate = () => {
+    const sorted = [...wordies].sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at)
+    })
+    setWordies(sorted)
+  }
+
   const onSearch = () => {
     if (search !== '') {
       setLoading(true)
@@ -106,6 +119,8 @@ const AdminWordy = () => {
       onSearch()
     } else if (filter !== '') {
       onFilter()
+    } else {
+      setWordies(allWordies)
     }
   }, [search, filter])
 
@@ -127,7 +142,10 @@ const AdminWordy = () => {
 
         {/* Filter */}
 
-        <FaFilter size={35} className="text-blue-500 cursor-pointer hover:text-black" />
+        <FaFilter
+          size={35}
+          className="text-blue-500 cursor-pointer hover:text-black"
+        />
         <select
           onChange={onChangeFilter}
           className="form-select form-select-sm w-fit"
@@ -142,6 +160,17 @@ const AdminWordy = () => {
             )
           })}
         </select>
+
+        <FaSortNumericDown
+          onClick={onSortDate}
+          size={35}
+          className="text-blue-500 cursor-pointer hover:text-black"
+        />
+        <FaSortNumericUp
+          onClick={onSortReverseDate}
+          size={35}
+          className="text-blue-500 cursor-pointer hover:text-black"
+        />
       </div>
       {loading ? (
         <Spin color={'danger'} />
@@ -162,6 +191,7 @@ const AdminWordy = () => {
                   ? wordy.turkish
                   : wordy.english}
                 <img className="h-30 w-30 mx-auto" src={wordy.image}></img>
+
                 <div className="my-2 flex items-center justify-around mt-3">
                   <FaTrash
                     onClick={() => onDelete(wordy._id)}

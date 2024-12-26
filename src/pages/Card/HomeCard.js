@@ -6,15 +6,16 @@ import { UserContext } from '../User/UserContext'
 
 export default function HomeCard() {
   const { user } = useContext(UserContext)
+  const [index, setIndex] = useState(0)
   const [wordyData, setWordyData] = useState([])
   const [loading, setLoading] = useState(true)
-
 
   const loadData = () => {
     if (!user) {
       getAllWords().then((data) => {
-       setWordyData(data.slice(0, 10))
-        setLoading(false)})
+        setWordyData(data.slice(0, 10))
+        setLoading(false)
+      })
     } else {
       getAllWords().then((data) => {
         setWordyData(data)
@@ -33,7 +34,7 @@ export default function HomeCard() {
           <Spin color={'primary'} />
         </div>
       ) : (
-        <FlashcardList words={wordyData} index={0} />
+        <FlashcardList words={wordyData} index={0} setIndex={setIndex} />
       )}
     </div>
   )

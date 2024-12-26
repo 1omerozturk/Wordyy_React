@@ -62,12 +62,12 @@ export default function Wordy() {
 
         <FlashcardList words={wordyData} index={index} setIndex={setIndex} />
         
-        <div className="grid grid-flow-col text-center mx-auto max-w-fit gap-4 px-5 overflow-x-auto mt-5">
+        <div className="grid grid-flow-col text-center mx-auto max-w-fit gap-4 px-5 overflow-x-auto">
         {wordyData.map((_, idx) => {
           const isCurrent = idx === index // Şu anki wordy
           const baseClass = 'rounded-md text-center p-1 border' // Ortak sınıflar
           const bgClass = isCurrent
-            ? 'bg-slate-600' // Şu anki wordy
+            ? 'bg-slate-400' // Şu anki wordy
             : 'bg-slate-200' 
 
             return (

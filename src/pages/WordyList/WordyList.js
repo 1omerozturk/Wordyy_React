@@ -5,11 +5,12 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Spin } from '../../components/Spinner/Spin'
 import { MdDelete, MdEdit } from 'react-icons/md'
 import showToast from '../../alert/ShowToast'
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch, FaSortNumericDown, FaSortNumericUp, FaWindowClose } from 'react-icons/fa'
 
 export const WordyList = () => {
   const [wordyList, setWordyList] = useState([])
-  const [allWordyList, setAllWordyList] = useState([])
+  const [active, setActive] = useState(false)
+  const [allWordyList, setAllWordyList] = useState(null)
   const { user } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -75,6 +76,20 @@ export const WordyList = () => {
     setSearch(e.target.value)
   }
 
+  const onSortDate = () => {
+    const sorted = [...wordyList].sort((a, b) => {
+      return new Date(a.created) - new Date(b.created)
+    })
+    setWordyList(sorted)
+  }
+
+  const onSortReverseDate = () => {
+    const sorted = [...wordyList].sort((a, b) => {
+      return new Date(b.created) - new Date(a.created)
+    })
+    setWordyList(sorted)
+  }
+
   useEffect(() => {
     loadData()
   }, [])
@@ -85,8 +100,7 @@ export const WordyList = () => {
         item.name.toLowerCase().includes(search.toLowerCase()),
       )
       setWordyList(filteredWordyList)
-    }
-    else{
+    } else {
       loadData()
     }
   }, [search])
@@ -115,6 +129,28 @@ export const WordyList = () => {
           placeholder="Search"
           aria-label="Search"
         />
+
+        <button onClick={()=>setActive(!active)} className={`btn btn-outline-${active ? 'danger' : 'secondary'}`}>
+          {active ? (
+            <FaWindowClose/>
+          ) : 'Sort'}
+        </button>
+        {active ? (
+          <>
+            <FaSortNumericDown
+              onClick={onSortDate}
+              size={30}
+              className="text-blue-500 cursor-pointer hover:text-black"
+            />
+            <FaSortNumericUp
+              onClick={onSortReverseDate}
+              size={30}
+              className="text-blue-500 cursor-pointer hover:text-black"
+            />
+          </>
+        ) : (
+          ''
+        )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {loading ? (

@@ -165,6 +165,7 @@ const Flashcards = ({ wordy, autoSlider }) => {
   )
 }
 
+
 const FlashcardList = ({ words, index, setIndex }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [user, setUser] = useState(null)
@@ -201,21 +202,28 @@ const FlashcardList = ({ words, index, setIndex }) => {
   }
 
   const handlers = useSwipeable({
-    onSwipedLeft: () =>
-      setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1)),
-    onSwipedRight: () =>
-      setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0)),
+    onSwipedLeft: () =>{
+      setIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1))
+      setCurrentIndex(index)
+    },
+  
+    onSwipedRight: () =>{
+      setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0))
+      setIndex((prevIndex)=> Math.max(prevIndex - 1, 0))
+    },
     preventDefaultTouchmoveEvent: true,
     trackMouse: true,
   })
-
+  
   const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1))
+    setIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1))
   }, [words.length])
-
+  
   const goToPrev = useCallback(() => {
     setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0))
-  }, [])
+    setIndex((prevIndex) => Math.max(prevIndex - 1, 0))
+  }, [index])
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -232,7 +240,7 @@ const FlashcardList = ({ words, index, setIndex }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress)
     }
-  }, [goToNext, goToPrev])
+  }, [goToNext, goToPrev, index])
   return (
     <>
       <div className="h-fit flex items-center justify-center">
