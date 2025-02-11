@@ -116,9 +116,9 @@ export const Profile = () => {
                     >
                       Add Wordy Automatic
                     </button>
-                    <div className={`mt-2 ${hidden ? 'collapse' : ''}`}>
-                      <div className="grid grid-flow-row bg-gray-400">
-                        <label className="font-semibold bg-gray-700 text-white rounded-md">
+                    <div className={`mt-2 ${hidden ? 'collapse' : ''} w-fit mx-auto bg-gradient-to-b from-black to-transparent `}>
+                      <div className="grid grid-flow-row sm:grid-flow-col sm:gap-x-2 gap-y-3 -space-y-2 sm:-space-y-0 bg-gray-400 w-full p-5">
+                        <label className="font-semibold bg-gray-700 text-white rounded-md w-full">
                           Level:
                         </label>
                         A1
@@ -149,11 +149,18 @@ export const Profile = () => {
                           value="B2"
                           onChange={handleLevel}
                         />
-                        C
+                        C1
                         <input
                           type="radio"
                           name="difficult"
-                          value="C"
+                          value="C1"
+                          onChange={handleLevel}
+                        />
+                        C2
+                        <input
+                          type="radio"
+                          name="difficult"
+                          value="C1"
                           onChange={handleLevel}
                         />
                         Academic
@@ -164,12 +171,12 @@ export const Profile = () => {
                           onChange={handleLevel}
                         />
                       </div>
-                      <div className=" mt-2 grid grid-flow-row bg-gray-400">
+                      <div className=" mt-2 grid grid-flow-row sm:grid-flow-col bg-gray-400 w-full text-center p-2 rounded-xl mx-auto">
                         <label className="font-semibold bg-gray-700 text-white rounded-md">
                           Difficult:
                         </label>
                         <select
-                          className="bg-gray-300"
+                          className="bg-white text-center w-fit mx-auto"
                           onChange={handleDifficult}
                         >
                           <option value="Easy">Easy</option>

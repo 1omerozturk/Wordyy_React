@@ -29,10 +29,10 @@ export default function Quiz() {
   }, [user])
 
   const getData = () => {
+    setLoading(true)
     if (id && userId) {
       getQuizDataId(id).then((res) => {
         setQuestions(res?.data)
-        console.log(res?.data)
       })
       getWordyListById(userId, id).then((res) => {
         setWrodyList(res?.data)
@@ -99,8 +99,7 @@ export default function Quiz() {
 
   return (
     <div>
-      {!questions && <Spin color="danger" />}
-      {questions && (
+      {questions.length<=0?<Spin color="danger" />:
         <div className="pt-5  mx-auto w-full h-screen bg-gradient-to-b from-slate-300 to-lime-200">
           {/* <div className="mx-auto p-2  text-5xl font-bold select-none bg-gradient-to-tr from-lime-200 rounded-md to-lime-700 w-fit">
             Wordy Quiz
@@ -216,7 +215,7 @@ export default function Quiz() {
             )}
           </div>
         </div>
-      )}
+      }
     </div>
     // <div>
     // <WordyList/>

@@ -5,12 +5,17 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Spin } from '../../components/Spinner/Spin'
 import { MdDelete, MdEdit } from 'react-icons/md'
 import showToast from '../../alert/ShowToast'
-import { FaSearch, FaSortNumericDown, FaSortNumericUp, FaWindowClose } from 'react-icons/fa'
+import {
+  FaSearch,
+  FaSortNumericDown,
+  FaSortNumericUp,
+  FaWindowClose,
+} from 'react-icons/fa'
 
 export const WordyList = () => {
   const [wordyList, setWordyList] = useState([])
   const [active, setActive] = useState(false)
-  const [allWordyList, setAllWordyList] = useState(null)
+  const [allWordyList, setAllWordyList] = useState([])
   const { user } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -28,7 +33,8 @@ export const WordyList = () => {
       .finally(() => {
         setLoading(false)
       })
-  })
+  },[wordyList])
+
 
   const convertDate = (d) => {
     const date = new Date(d)
@@ -93,6 +99,7 @@ export const WordyList = () => {
   useEffect(() => {
     loadData()
   }, [])
+  
 
   useEffect(() => {
     if (search !== '') {
@@ -101,7 +108,7 @@ export const WordyList = () => {
       )
       setWordyList(filteredWordyList)
     } else {
-      loadData()
+      setWordyList(allWordyList)
     }
   }, [search])
 
@@ -130,10 +137,11 @@ export const WordyList = () => {
           aria-label="Search"
         />
 
-        <button onClick={()=>setActive(!active)} className={`btn btn-outline-${active ? 'danger' : 'secondary'}`}>
-          {active ? (
-            <FaWindowClose/>
-          ) : 'Sort'}
+        <button
+          onClick={() => setActive(!active)}
+          className={`btn btn-outline-${active ? 'danger' : 'secondary'}`}
+        >
+          {active ? <FaWindowClose /> : 'Sort'}
         </button>
         {active ? (
           <>
