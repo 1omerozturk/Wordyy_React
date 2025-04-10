@@ -35,7 +35,7 @@ export default function Wordy() {
   return (
     <div className="pt-5 w-full mx-auto h-fit">
       <Outlet />
-      {user && user?.role === 'admin' ? (
+      {user!==null && user?.user?.role=='user'? (
         <NavLink
           className={`${
             location.pathname === '/wordy/wordyadd' ? 'collapse' : ''

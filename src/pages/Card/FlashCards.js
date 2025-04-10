@@ -1,15 +1,24 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import './FlashCards.css'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
-import { MdOutlineBrightnessAuto } from 'react-icons/md'
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaTimes,
+  FaTimesCircle,
+} from 'react-icons/fa'
+import {
+  MdOutlineBrightnessAuto,
+  MdOutlineTimer,
+  MdOutlineCheck,
+} from 'react-icons/md'
 import { NavLink, useLocation } from 'react-router-dom'
 import getRandomColor from '../../components/Color/GetRandomColor'
 import { Dropdown } from './Dropdown'
 import { UserContext } from '../User/UserContext'
-import { getUser } from '../../api/api'
+import { getAllWords, getUser } from '../../api/api'
 
-const Flashcards = ({ wordy, autoSlider }) => {
+const Flashcards = ({ wordy, autoSlider,time }) => {
   const { user } = useContext(UserContext)
   const [userId, setUserId] = useState('')
   const [userRole, setUserRole] = useState('')
@@ -44,7 +53,7 @@ const Flashcards = ({ wordy, autoSlider }) => {
     if (autoSlider) {
       const intervalId = setInterval(() => {
         setIsFlipped(!isFlipped)
-      }, 3500)
+      }, time/2)
       return () => clearInterval(intervalId)
     }
   }, [autoSlider])
@@ -165,19 +174,35 @@ const Flashcards = ({ wordy, autoSlider }) => {
   )
 }
 
-
 const FlashcardList = ({ words, index, setIndex }) => {
+  const [allWords, setAllWords] = useState([])
+  const [time, setTime] = useState(7000)
+  const [timeSelectModal, setTimeSelectModal] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [user, setUser] = useState(null)
+  const user = useContext(UserContext)
   const [autoSlider, setAutoSlider] = useState(false)
   const location = useLocation()
 
-  const getCurrentUser = () => {
-    setUser(localStorage.getItem('token'))
+  const loadData = async () => {
+    await getAllWords().then((data) => {
+      setAllWords(data)
+    })
+  }
+
+  const timeSelect = [
+    { value: 3000, label: '3 seconds' },
+    { value: 5000, label: '5 seconds' },
+    { value: 7000, label: '7 seconds' },
+    { value: 10000, label: '10 seconds' },
+  ]
+
+  const handleTimeSelect = (value) => {
+    console.log(value)
+    setTime(value)
   }
 
   useEffect(() => {
-    getCurrentUser()
+    loadData()
   }, [])
 
   useEffect(() => {
@@ -192,34 +217,34 @@ const FlashcardList = ({ words, index, setIndex }) => {
           setIndex(newIndex) // Update the parent component's index
           return newIndex
         })
-      }, 7000)
+      }, time)
       return () => clearInterval(intervalId)
     }
-  }, [autoSlider, words.length, setIndex])
+  }, [autoSlider, words.length, setIndex, time])
 
   const handleAutoSlider = () => {
     setAutoSlider(!autoSlider)
   }
 
   const handlers = useSwipeable({
-    onSwipedLeft: () =>{
+    onSwipedLeft: () => {
       setIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1))
       setCurrentIndex(index)
     },
-  
-    onSwipedRight: () =>{
+
+    onSwipedRight: () => {
       setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0))
-      setIndex((prevIndex)=> Math.max(prevIndex - 1, 0))
+      setIndex((prevIndex) => Math.max(prevIndex - 1, 0))
     },
     preventDefaultTouchmoveEvent: true,
     trackMouse: true,
   })
-  
+
   const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1))
     setIndex((prevIndex) => Math.min(prevIndex + 1, words.length - 1))
   }, [words.length])
-  
+
   const goToPrev = useCallback(() => {
     setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0))
     setIndex((prevIndex) => Math.max(prevIndex - 1, 0))
@@ -243,7 +268,7 @@ const FlashcardList = ({ words, index, setIndex }) => {
   }, [goToNext, goToPrev, index])
   return (
     <>
-      <div className="h-fit flex items-center justify-center">
+      <div className="h-fit flex items-center justify-center space-x-3">
         <button
           title="Auto Slide"
           className={`animate-pulse hover:animate-none btn text-slate-500 btn-outline-${
@@ -252,11 +277,59 @@ const FlashcardList = ({ words, index, setIndex }) => {
           onClick={handleAutoSlider}
         >
           <MdOutlineBrightnessAuto
-            className="float-right ml-2 hover:animate-spin"
+            className="float-right hover:animate-spin ml-2"
             size={25}
           />
           {`${autoSlider ? 'Stop' : 'Start'}`}
         </button>
+        {/* time selection button for dropdown button */}
+        <button
+          title="Time Selection"
+          className={`btn text-slate-500 btn-outline-dark`}
+          onClick={() => setTimeSelectModal(!timeSelectModal)}
+        >
+          <MdOutlineTimer className="float-right hover:animate-spin" size={25} />
+        </button>
+        {/* time selection modal */}
+        <div
+          className={`fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50
+          ${timeSelectModal ? 'block' : 'hidden'}`}
+        >
+          <div className="bg-white p-4 rounded-md shadow-md w-96">
+            <div
+              className="float-right cursor-pointer"
+              onClick={() => setTimeSelectModal(false)}
+            >
+              <FaTimesCircle className="text-red-500 text-2xl" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-800 my-3">
+              Time Selection(s)
+            </h2>
+            <div className="md:flex flex-col space-y-2">
+              <div className="md:flex justify-between font-bold mt-3">
+                {timeSelect.map((t, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <input
+                    className='size-5'
+                      key={index}
+                      type="checkbox"
+                      checked={time==t.value}
+                      onChange={() => handleTimeSelect(t.value)}
+                    />
+                    <span className="text-slate-500">{t.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* okay button */}
+            <button
+              className="btn mt-5 text-slate-500 btn-outline-dark w-full text-center"
+              onClick={() => setTimeSelectModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
       </div>
       <div className="flex col min-h-[500px] h-3/4 min-w-fit mx-auto">
         {/* Sol Buton */}
@@ -288,7 +361,7 @@ const FlashcardList = ({ words, index, setIndex }) => {
                 }`}
               >
                 {index === currentIndex && (
-                  <Flashcards wordy={word} autoSlider={autoSlider} />
+                  <Flashcards wordy={word} autoSlider={autoSlider} time={time} />
                 )}
               </div>
             ))}
@@ -316,7 +389,7 @@ const FlashcardList = ({ words, index, setIndex }) => {
       <div className="counter mt-3 select-none text-center text-lg text-slate-500">
         {currentIndex + 1 === words.length ? (
           <div>
-            {user === null ? (
+            {user?.user !== null ? (
               <div>
                 {location.pathname === '/wordy' ? (
                   <>
@@ -330,17 +403,18 @@ const FlashcardList = ({ words, index, setIndex }) => {
                 ) : (
                   <>
                     <NavLink
+                      style={{ textDecoration: 'none' }}
                       className="text-sky-500 hover:text-gray-600"
                       to="/wordy"
                     >
-                      Wordy
+                      {' '}
+                      <span className="font-serif text-white bg-indigo-600 rounded-lg px-1">
+                        Wordy Card
+                      </span>
                     </NavLink>{' '}
                   </>
                 )}
-                for more than{' '}
-                <span className="font-serif text-white bg-indigo-600 rounded-lg px-1">
-                  Wordy Card
-                </span>
+                for more than Cards.
               </div>
             ) : (
               'You have finished all the cards!'
